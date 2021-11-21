@@ -13,7 +13,17 @@
     "react-dom": "17.0.2"
   },
   "devDependencies": {
+    "@types/react": "^17.0.35",
     "eslint": "7.32.0",
     "eslint-config-next": "12.0.4"
-  }
+  },
+  "description": "Hello!",
+  "version": "1.0.0",
+  "main": "next.config.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }
