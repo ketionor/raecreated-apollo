@@ -1,11 +1,30 @@
 import { atom } from "jotai";
+import { atomWithStorage } from "jotai/utils";
 
 interface User {
-  isLoggedIn: boolean;
-  accessToken: string;
+  isLoggedIn: Boolean;
+  accessToken?: String;
+  cartId?: String;
 }
 
-export const userAtom = atom<User>({
+export const userAtom = atomWithStorage<User>("userInfo", {
   isLoggedIn: false,
-  accessToken: "",
 });
+
+interface Cart {
+  lines?: {
+    edges: [
+      {
+        node: {
+          id: String;
+          merchandise: {
+            id: String;
+          };
+          quantity: number;
+        };
+      }
+    ];
+  };
+}
+
+export const cartAtom = atomWithStorage<Cart>("cartInfo", {});

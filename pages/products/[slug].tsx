@@ -3,6 +3,9 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { useAtom } from "jotai";
+import { userAtom, cartAtom } from "../../lib/atoms";
+import { updateCartQuantity } from "../../lib/shopify";
 // import ProductsPage from "../../components/ProductsPage/ProductsPage";
 
 import {
@@ -14,6 +17,9 @@ import {
 
 function Product({ product }) {
   const [isLoading, setIsLoading] = useState(false);
+  const [quantity, setQuantity] = useState(1);
+  const [user, setUser] = useAtom(userAtom);
+  const [cart, setCart] = useAtom(cartAtom);
 
   // console.log(JSON.stringify(product, null, 40));
 
@@ -29,8 +35,32 @@ function Product({ product }) {
     buyItNow(variantId);
   };
 
+  const handleUpdateQuantity = async (e) => {
+    setQuantity(Number(e.target.value));
+  };
+
   const handleAddToCart = async () => {
-    createCart(variantId, 1);
+    if (user.cartId) {
+      //handle updating cart
+      //checks to see if this variant is already in the cart, if it is, returns the id
+      const exists = cart.lines.edges.find(
+        (element) => element.node.merchandise.id === variantId
+      );
+      if (exists) {
+        //update quantity
+        let id = exists.node.id;
+        let num = exists.node.quantity + quantity;
+        const { data } = await updateCartQuantity(user.cartId, id, num);
+        setCart(Object.assign(cart, data.cartLinesUpdate.cart));
+      } else {
+        //create new line
+      }
+    } else {
+      //create a new cartand add the item
+      const data = await createCart(variantId, 1);
+      setUser({ ...user, cartId: data.cartCreate.cart.id });
+      setCart(Object.assign(cart, data.cartCreate.cart));
+    }
   };
 
   return (
@@ -57,6 +87,11 @@ function Product({ product }) {
         <div className="info-container">
           <h1 className="title">{title}</h1>
           <h2>{price}</h2>
+          <input
+            type="number"
+            value={quantity}
+            onChange={handleUpdateQuantity}
+          />
           <button onClick={handleBuyNow}>Buy it Now</button>
           <button onClick={handleAddToCart}>Add to Cart</button>
         </div>

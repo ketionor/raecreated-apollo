@@ -37,6 +37,40 @@ export async function createCart(variantId: String, quantity: Number) {
   };
 
   const { data } = await ShopifyData(createCartMutation, cartInput);
+  return data;
+}
+
+export async function updateCartQuantity(
+  cartId: String,
+  lineId: String,
+  quantity: Number
+) {
+  const input = {
+    cartId,
+    lines: {
+      id: lineId,
+      quantity,
+    },
+  };
+
+  const data = ShopifyData(cartLinesUpdateMutation, input);
+  console.log(data);
+  return data;
+}
+
+export async function retrieveCart(variantId: String, quantity: Number) {
+  const cartInput = {
+    cartInput: {
+      lines: [
+        {
+          quantity: quantity,
+          merchandiseId: variantId,
+        },
+      ],
+    },
+  };
+
+  const { data } = await ShopifyData(createCartMutation, cartInput);
   const cartId = data.cartCreate.cart.id;
 }
 
@@ -201,6 +235,47 @@ const createAccessTokenMutation = gql`
       customerAccessToken {
         accessToken
         expiresAt
+      }
+    }
+  }
+`;
+
+const cartLinesUpdateMutation = gql`
+  mutation cartLinesUpdate($cartId: ID!, $lines: [CartLineUpdateInput!]!) {
+    cartLinesUpdate(cartId: $cartId, lines: $lines) {
+      cart {
+        id
+        lines(first: 10) {
+          edges {
+            node {
+              id
+              quantity
+              merchandise {
+                ... on ProductVariant {
+                  id
+                }
+              }
+            }
+          }
+        }
+        estimatedCost {
+          totalAmount {
+            amount
+            currencyCode
+          }
+          subtotalAmount {
+            amount
+            currencyCode
+          }
+          totalTaxAmount {
+            amount
+            currencyCode
+          }
+          totalDutyAmount {
+            amount
+            currencyCode
+          }
+        }
       }
     }
   }
