@@ -1,3 +1,6 @@
+import { useAtom } from "jotai";
+import { userAtom } from "./atoms";
+
 const domain = process.env.SHOPIFY_STORE_DOMAIN;
 const storefrontAccessToken = process.env.SHOPIFY_STOREFRONT_ACCESSTOKEN;
 
@@ -81,6 +84,41 @@ export async function getProductByHandle(handle: String) {
   return data.shop.productByHandle;
 }
 
+export async function createCustomer(
+  email: String,
+  password: String,
+  acceptsMarketing: Boolean,
+  firstName?: String,
+  lastName?: String,
+  phone?: String
+) {
+  const input = {
+    input: {
+      firstName,
+      lastName,
+      phone,
+      email,
+      password,
+      acceptsMarketing,
+    },
+  };
+
+  const { data } = await ShopifyData(createCustomerMutation, input);
+  console.log(data);
+}
+
+export async function createAccessToken(email: String, password: String) {
+  const input = {
+    input: {
+      email,
+      password,
+    },
+  };
+
+  const { data } = await ShopifyData(createAccessTokenMutation, input);
+  return data;
+}
+
 const gql = String.raw;
 
 const createCartMutation = gql`
@@ -132,6 +170,37 @@ const buyNowMutation = gql`
     ) {
       checkout {
         webUrl
+      }
+    }
+  }
+`;
+
+const createCustomerMutation = gql`
+  mutation customerCreate($input: CustomerCreateInput!) {
+    customerCreate(input: $input) {
+      customerUserErrors {
+        code
+        field
+        message
+      }
+      customer {
+        id
+      }
+    }
+  }
+`;
+
+const createAccessTokenMutation = gql`
+  mutation customerAccessTokenCreate($input: CustomerAccessTokenCreateInput!) {
+    customerAccessTokenCreate(input: $input) {
+      customerUserErrors {
+        code
+        field
+        message
+      }
+      customerAccessToken {
+        accessToken
+        expiresAt
       }
     }
   }
