@@ -43,7 +43,7 @@ const pageQuery = gql`
   {
     shop {
       collectionByHandle(handle: "always-in-stock") {
-        products(first: 1) {
+        products(first: 10) {
           edges {
             node {
               id
@@ -72,7 +72,7 @@ const pageQuery = gql`
 export async function getStaticProps() {
   const { data } = await ShopifyData(pageQuery);
 
-  console.log(data);
+  console.log(data.shop.collectionByHandle.products.edges);
 
   return {
     props: {

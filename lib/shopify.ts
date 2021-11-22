@@ -58,6 +58,25 @@ export async function updateCartQuantity(
   return data;
 }
 
+export async function addNewLineItem(
+  cartId: string,
+  variantId: string,
+  quantity: number
+) {
+  const input = {
+    cartId,
+    lines: [
+      {
+        merchandiseId: variantId,
+        quantity,
+      },
+    ],
+  };
+
+  const data = ShopifyData(addNewLineItemMutation, input);
+  return data;
+}
+
 export async function retrieveCart(variantId: String, quantity: Number) {
   const cartInput = {
     cartInput: {
@@ -245,7 +264,7 @@ const cartLinesUpdateMutation = gql`
     cartLinesUpdate(cartId: $cartId, lines: $lines) {
       cart {
         id
-        lines(first: 10) {
+        lines(first: 250) {
           edges {
             node {
               id
@@ -276,6 +295,52 @@ const cartLinesUpdateMutation = gql`
             currencyCode
           }
         }
+      }
+    }
+  }
+`;
+
+const addNewLineItemMutation = gql`
+  mutation cartLinesAdd($lines: [CartLineInput!]!, $cartId: ID!) {
+    cartLinesAdd(lines: $lines, cartId: $cartId) {
+      cart {
+        id
+        lines(first: 250) {
+          edges {
+            node {
+              id
+              quantity
+              merchandise {
+                ... on ProductVariant {
+                  id
+                }
+              }
+            }
+          }
+        }
+        estimatedCost {
+          totalAmount {
+            amount
+            currencyCode
+          }
+          subtotalAmount {
+            amount
+            currencyCode
+          }
+          totalTaxAmount {
+            amount
+            currencyCode
+          }
+          totalDutyAmount {
+            amount
+            currencyCode
+          }
+        }
+      }
+      userErrors {
+        code
+        field
+        message
       }
     }
   }

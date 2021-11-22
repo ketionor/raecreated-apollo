@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useAtom } from "jotai";
 import { userAtom, cartAtom } from "../../lib/atoms";
-import { updateCartQuantity } from "../../lib/shopify";
+import { updateCartQuantity, addNewLineItem } from "../../lib/shopify";
 // import ProductsPage from "../../components/ProductsPage/ProductsPage";
 
 import {
@@ -39,6 +39,7 @@ function Product({ product }) {
     setQuantity(Number(e.target.value));
   };
 
+  //may abstract this out to shopify.ts, would need to be passed variantId only
   const handleAddToCart = async () => {
     if (user.cartId) {
       //handle updating cart
@@ -53,11 +54,13 @@ function Product({ product }) {
         const { data } = await updateCartQuantity(user.cartId, id, num);
         setCart(Object.assign(cart, data.cartLinesUpdate.cart));
       } else {
-        //create new line
+        //create new line item
+        const { data } = await addNewLineItem(user.cartId, variantId, quantity);
+        setCart(Object.assign(cart, data.cartLinesAdd.cart));
       }
     } else {
       //create a new cartand add the item
-      const data = await createCart(variantId, 1);
+      const data = await createCart(variantId, quantity);
       setUser({ ...user, cartId: data.cartCreate.cart.id });
       setCart(Object.assign(cart, data.cartCreate.cart));
     }
@@ -160,7 +163,7 @@ const pageQuery = gql`
   {
     shop {
       collectionByHandle(handle: "always-in-stock") {
-        products(first: 1) {
+        products(first: 10) {
           edges {
             node {
               id

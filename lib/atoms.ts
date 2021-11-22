@@ -2,9 +2,9 @@ import { atom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
 
 interface User {
-  isLoggedIn: Boolean;
-  accessToken?: String;
-  cartId?: String;
+  isLoggedIn: boolean;
+  accessToken?: string;
+  cartId?: string;
 }
 
 export const userAtom = atomWithStorage<User>("userInfo", {
