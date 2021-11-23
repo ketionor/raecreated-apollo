@@ -73,7 +73,6 @@ const Nav = () => {
             --padding: 2rem;
             display: flex;
             justify-content: center;
-            max-width: 1024px;
             width: 100%;
           }
           .inner-container {
@@ -82,6 +81,7 @@ const Nav = () => {
             justify-content: space-between;
             max-width: 1024px;
             width: 100%;
+            padding: 1rem;
           }
           .logoContainer {
             display: flex;

@@ -5,8 +5,8 @@ import { useAtom, Provider } from "jotai";
 
 export default function Home() {
   return (
-    <div className="">
+    <>
       <Hero />
-    </div>
+    </>
   );
 }

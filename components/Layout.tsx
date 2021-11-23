@@ -14,11 +14,15 @@ const Layout = ({ children }) => {
           .global-container {
             width: 100vw;
             height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
           }
 
           .content-container {
             width: 100%;
-            margin: 1rem;
+            min-height: 100vh;
+            padding: 1rem;
             max-width: 1024px;
           }
         `}

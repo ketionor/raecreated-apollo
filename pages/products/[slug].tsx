@@ -15,9 +15,9 @@ import {
 } from "../../lib/shopify";
 import { useMutation, gql, useQuery, useLazyQuery } from "@apollo/client";
 import client from "../../lib/apollo";
+import AddToCartButton from "../../components/AddToCartButton";
 
 function Product({ TITLE, FEATURED_IMG, ID, HTML }) {
-  const [isLoading, setIsLoading] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [cartId, setCartID] = useState("");
   const [user, setUser] = useAtom(userAtom);
@@ -125,7 +125,7 @@ function Product({ TITLE, FEATURED_IMG, ID, HTML }) {
 
   return (
     <>
-      <div>
+      <div className="page-container">
         <div className="image-container">
           <div className="featured-image-container">
             <Image
@@ -153,7 +153,8 @@ function Product({ TITLE, FEATURED_IMG, ID, HTML }) {
             onChange={handleUpdateQuantity}
           />
           <button onClick={handleBuyNow}>Buy it Now</button>
-          <button onClick={handleAddToCart}>Add to Cart</button>
+          {/* <button onClick={handleAddToCart}>Add to Cart</button> */}
+          <AddToCartButton id={ID} />
         </div>
         <div className="description">
           <div dangerouslySetInnerHTML={{ __html: HTML }} />
