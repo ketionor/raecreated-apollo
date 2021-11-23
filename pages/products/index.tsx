@@ -4,6 +4,7 @@ import client from "../../lib/apollo";
 import { getCollectionByHandleQuery } from "../../lib/shopify";
 
 import { gql } from "@apollo/client";
+import AddToCartButton from "../../components/AddToCartButton";
 // import ProductsPage from "../../components/ProductsPage/ProductsPage";
 
 function Products({ products }) {
@@ -12,10 +13,12 @@ function Products({ products }) {
     <>
       <div className="page-container">
         {products.map((product) => {
+          console.log(product);
           const featuredImage = product.node.images.edges[0].node.originalSrc;
           const title = product.node.title;
           const price = product.node.priceRange.minVariantPrice.amount;
           const slug = product.node.handle;
+          const id = product.node.variants.edges[0].node.id;
 
           return (
             <>
@@ -31,6 +34,7 @@ function Products({ products }) {
                   <h2>{price}</h2>
                 </div>
               </Link>
+              <AddToCartButton id={id} quantity={1} />
             </>
           );
         })}

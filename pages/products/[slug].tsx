@@ -1,71 +1,19 @@
-import Error from "next/error";
-import { useRouter } from "next/router";
 import Image from "next/image";
-import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useAtom } from "jotai";
 import { userAtom } from "../../lib/atoms";
 import {
-  createCartMutation,
   getProductByHandle,
-  addNewLineItemMutation,
   retrieveCartQuery,
-  cartLinesUpdateMutation,
   getCollectionByHandleQuery,
 } from "../../lib/shopify";
-import { useMutation, gql, useQuery, useLazyQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import client from "../../lib/apollo";
 import AddToCartButton from "../../components/AddToCartButton";
 
 function Product({ TITLE, FEATURED_IMG, ID, HTML }) {
   const [quantity, setQuantity] = useState(1);
-  const [cartId, setCartID] = useState("");
   const [user, setUser] = useAtom(userAtom);
-
-  const [lazyRetrieveCart, lazyRetrieveCartData] = useLazyQuery(
-    retrieveCartQuery,
-    {
-      variables: { id: user.cartId },
-    }
-  );
-
-  useEffect(() => {
-    //since the apollo in memory cache is used to store the current cart,
-    //check to make sure that the cart is in the cache, if it exists
-    user.cartId && lazyRetrieveCart();
-  }, []);
-
-  //creates a new cart, adds line item to it
-  const [createCart, createCartData] = useMutation(createCartMutation, {
-    variables: {
-      cartInput: {
-        lines: [
-          {
-            quantity: quantity,
-            merchandiseId: ID,
-          },
-        ],
-      },
-    },
-  });
-
-  //adds this item to an existing cart
-  const [addToCart, addToCartData] = useMutation(addNewLineItemMutation, {
-    variables: {
-      cartId: user.cartId,
-      lines: [
-        {
-          merchandiseId: ID,
-          quantity,
-        },
-      ],
-    },
-  });
-
-  //update the quantity of this item if it is already in the cart
-  const [updateQuantity, updateQuantityData] = useMutation(
-    cartLinesUpdateMutation
-  );
 
   const handleBuyNow = async () => {
     const { cart } = await client.readQuery({
@@ -80,47 +28,6 @@ function Product({ TITLE, FEATURED_IMG, ID, HTML }) {
 
   const handleUpdateQuantity = async (e) => {
     setQuantity(Number(e.target.value));
-  };
-
-  const handleAddToCart = async () => {
-    if (user.cartId) {
-      //if the user already has a cart in local storage
-
-      //first, query the cache to get the latest version on the cart
-      const { cart } = await client.readQuery({
-        query: retrieveCartQuery,
-        variables: {
-          id: user.cartId,
-        },
-      });
-
-      //next, check to see if that item is already in the cart or not
-      const THIS_ITEM_IN_CART = cart.lines.edges.find(
-        (element) => element.node.merchandise.id === ID
-      );
-
-      if (THIS_ITEM_IN_CART) {
-        //update quantity
-        const THIS_LINE_ID = THIS_ITEM_IN_CART.node.id;
-        let newQuantity = THIS_ITEM_IN_CART.node.quantity + quantity;
-        updateQuantity({
-          variables: {
-            cartId: user.cartId,
-            lines: {
-              id: THIS_LINE_ID,
-              quantity: newQuantity,
-            },
-          },
-        });
-      } else {
-        //create new line item
-        addToCart();
-      }
-    } else {
-      //if the user does not already have a cart
-      const response = await createCart();
-      setUser({ ...user, cartId: response.data.cartCreate.cart.id });
-    }
   };
 
   return (
@@ -154,7 +61,7 @@ function Product({ TITLE, FEATURED_IMG, ID, HTML }) {
           />
           <button onClick={handleBuyNow}>Buy it Now</button>
           {/* <button onClick={handleAddToCart}>Add to Cart</button> */}
-          <AddToCartButton id={ID} />
+          <AddToCartButton id={ID} quantity={quantity} />
         </div>
         <div className="description">
           <div dangerouslySetInnerHTML={{ __html: HTML }} />

@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { useAtom } from "jotai";
 import { userAtom } from "../lib/atoms";
 import client from "../lib/apollo";
@@ -12,10 +11,14 @@ import {
   getCollectionByHandleQuery,
 } from "../lib/shopify";
 
+interface AddToCartButton {
+  id: string;
+  quantity: number;
+}
+
 //created this component for the sole purpose of housing the
 //sizable add to cart function
-const AddToCartButton = ({ id }) => {
-  const [quantity, setQuantity] = useState(1);
+const AddToCartButton = ({ id, quantity }: AddToCartButton) => {
   const [user, setUser] = useAtom(userAtom);
 
   //creates a new cart, adds line item to it
