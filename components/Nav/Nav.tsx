@@ -11,7 +11,7 @@ const links = [
   { name: "Home", to: "/" },
   { name: "About", to: "/about" },
   { name: "Blog", to: "/blog" },
-  { name: "Projects", to: "/projects" },
+  { name: "In Stock", to: "/products" },
   { name: "Contact", to: "/contact" },
 ];
 
@@ -37,9 +37,7 @@ const Nav = () => {
               if (to[0] === "/") {
                 return (
                   <li>
-                    <Link href={to} activeClassName="activeLink">
-                      {name}
-                    </Link>
+                    <Link href={to}>{name}</Link>
                   </li>
                 );
               } else {

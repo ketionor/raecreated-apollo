@@ -1,9 +1,10 @@
-import { useAtom } from "jotai";
-import { countAtom } from "./Layout";
-
 const Hero = () => {
-  const [count, setCount] = useAtom(countAtom);
-  return <div></div>;
+  return (
+    <div>
+      <h1>raecreatedit</h1>
+      <h2>I make things.</h2>
+    </div>
+  );
 };
 
 export default Hero;

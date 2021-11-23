@@ -1,106 +1,18 @@
-import { useAtom } from "jotai";
-import { userAtom } from "./atoms";
+import { gql } from "@apollo/client";
+import client from "./apollo";
 
 const domain = process.env.SHOPIFY_STORE_DOMAIN;
 const storefrontAccessToken = process.env.SHOPIFY_STOREFRONT_ACCESSTOKEN;
 
-export async function ShopifyData(query: Object, variables: Object = {}) {
-  const URL = `https://thread-and-scissor-hands.myshopify.com/api/2021-10/graphql.json`;
-
-  const options = {
-    method: "POST",
-    headers: {
-      "X-Shopify-Storefront-Access-Token": "4ebfabcacbaa2d69010004d3cb4c9a57",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ query, variables }),
-  };
-
-  try {
-    const response = await fetch(URL, options);
-    return response.json();
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-export async function createCart(variantId: String, quantity: Number) {
-  const cartInput = {
-    cartInput: {
-      lines: [
-        {
-          quantity: quantity,
-          merchandiseId: variantId,
-        },
-      ],
-    },
-  };
-
-  const { data } = await ShopifyData(createCartMutation, cartInput);
-  return data;
-}
-
-export async function updateCartQuantity(
-  cartId: String,
-  lineId: String,
-  quantity: Number
-) {
-  const input = {
-    cartId,
-    lines: {
-      id: lineId,
-      quantity,
-    },
-  };
-
-  const data = ShopifyData(cartLinesUpdateMutation, input);
-  console.log(data);
-  return data;
-}
-
-export async function addNewLineItem(
-  cartId: string,
-  variantId: string,
-  quantity: number
-) {
-  const input = {
-    cartId,
-    lines: [
-      {
-        merchandiseId: variantId,
-        quantity,
-      },
-    ],
-  };
-
-  const data = ShopifyData(addNewLineItemMutation, input);
-  return data;
-}
-
-export async function retrieveCart(variantId: String, quantity: Number) {
-  const cartInput = {
-    cartInput: {
-      lines: [
-        {
-          quantity: quantity,
-          merchandiseId: variantId,
-        },
-      ],
-    },
-  };
-
-  const { data } = await ShopifyData(createCartMutation, cartInput);
-  const cartId = data.cartCreate.cart.id;
-}
-
-export async function buyItNow(variantId: String) {
-  const { data } = await ShopifyData(buyNowMutation, { variantId });
-  const { webUrl } = data.checkoutCreate.checkout;
-  window.location.href = webUrl;
-}
+// export async function buyItNow(variantId: String) {
+//   const { data } = await ShopifyData(buyNowMutation, { variantId });
+//   const { webUrl } = data.checkoutCreate.checkout;
+//   window.location.href = webUrl;
+// }
 
 export async function getProductByHandle(handle: String) {
-  const query = `
+  const data = client.query({
+    query: gql`
   {
     shop {
       productByHandle(handle: "${handle}") {
@@ -131,216 +43,220 @@ export async function getProductByHandle(handle: String) {
       }
     }
   }
-`;
-
-  const { data } = await ShopifyData(query);
-  return data.shop.productByHandle;
-}
-
-export async function createCustomer(
-  email: String,
-  password: String,
-  acceptsMarketing: Boolean,
-  firstName?: String,
-  lastName?: String,
-  phone?: String
-) {
-  const input = {
-    input: {
-      firstName,
-      lastName,
-      phone,
-      email,
-      password,
-      acceptsMarketing,
-    },
-  };
-
-  const { data } = await ShopifyData(createCustomerMutation, input);
-  console.log(data);
-}
-
-export async function createAccessToken(email: String, password: String) {
-  const input = {
-    input: {
-      email,
-      password,
-    },
-  };
-
-  const { data } = await ShopifyData(createAccessTokenMutation, input);
+`,
+  });
   return data;
 }
 
-const gql = String.raw;
+// export async function createCustomer(
+//   email: string,
+//   password: string,
+//   acceptsMarketing: boolean,
+//   firstName?: string,
+//   lastName?: string,
+//   phone?: string
+// ) {
+//   const input = {
+//     input: {
+//       firstName,
+//       lastName,
+//       phone,
+//       email,
+//       password,
+//       acceptsMarketing,
+//     },
+//   };
 
-const createCartMutation = gql`
+//   const { data } = await ShopifyData(createCustomerMutation, input);
+//   console.log(data);
+// }
+
+// export async function createAccessToken(email: String, password: String) {
+//   const input = {
+//     input: {
+//       email,
+//       password,
+//     },
+//   };
+
+//   const { data } = await ShopifyData(createAccessTokenMutation, input);
+//   return data;
+// }
+const cartQueryFragment = `
+    cart(id: $id) {
+      id
+      lines(first: 250) {
+        edges {
+          node {
+            id
+            merchandise {
+              ... on ProductVariant {
+                id
+                product {
+                  images(first: 1) {
+                    edges {
+                      node {
+                        originalSrc
+                      }
+                    }
+                  }
+                  id
+                  handle
+                  title
+                }
+              }
+            }
+            quantity
+            estimatedCost {
+              subtotalAmount {
+                amount
+              }
+            }
+          }
+        }
+      }
+  }
+`;
+
+const cartQueryFragmentWithoutId = `
+    cart {
+      id
+      lines(first: 250) {
+        edges {
+          node {
+            id
+            merchandise {
+              ... on ProductVariant {
+                id
+                product {
+                  images(first: 1) {
+                    edges {
+                      node {
+                        originalSrc
+                      }
+                    }
+                  }
+                  id
+                  handle
+                  title
+                }
+              }
+            }
+            quantity
+            estimatedCost {
+              subtotalAmount {
+                amount
+              }
+            }
+          }
+        }
+      }
+  }
+`;
+
+export const createCartMutation = gql`
   mutation createCart($cartInput: CartInput) {
     cartCreate(input: $cartInput) {
-      cart {
-        id
-        createdAt
-        updatedAt
-        lines(first: 10) {
-          edges {
-            node {
-              id
-              merchandise {
-                ... on ProductVariant {
-                  id
-                }
-              }
-            }
-          }
-        }
-        estimatedCost {
-          totalAmount {
-            amount
-            currencyCode
-          }
-          subtotalAmount {
-            amount
-            currencyCode
-          }
-          totalTaxAmount {
-            amount
-            currencyCode
-          }
-          totalDutyAmount {
-            amount
-            currencyCode
-          }
-        }
-      }
+      ${cartQueryFragmentWithoutId}
     }
   }
 `;
 
-const buyNowMutation = gql`
-  mutation CheckoutCreate($variantId: ID!) {
-    checkoutCreate(
-      input: { lineItems: { variantId: $variantId, quantity: 1 } }
-    ) {
-      checkout {
-        webUrl
-      }
-    }
-  }
-`;
+// const buyNowMutation = gql`
+//   mutation CheckoutCreate($variantId: ID!) {
+//     checkoutCreate(
+//       input: { lineItems: { variantId: $variantId, quantity: 1 } }
+//     ) {
+//       checkout {
+//         webUrl
+//       }
+//     }
+//   }
+// `;
 
-const createCustomerMutation = gql`
-  mutation customerCreate($input: CustomerCreateInput!) {
-    customerCreate(input: $input) {
-      customerUserErrors {
-        code
-        field
-        message
-      }
-      customer {
-        id
-      }
-    }
-  }
-`;
+// const createCustomerMutation = gql`
+//   mutation customerCreate($input: CustomerCreateInput!) {
+//     customerCreate(input: $input) {
+//       customerUserErrors {
+//         code
+//         field
+//         message
+//       }
+//       customer {
+//         id
+//       }
+//     }
+//   }
+// `;
 
-const createAccessTokenMutation = gql`
-  mutation customerAccessTokenCreate($input: CustomerAccessTokenCreateInput!) {
-    customerAccessTokenCreate(input: $input) {
-      customerUserErrors {
-        code
-        field
-        message
-      }
-      customerAccessToken {
-        accessToken
-        expiresAt
-      }
-    }
-  }
-`;
+// const createAccessTokenMutation = gql`
+//   mutation customerAccessTokenCreate($input: CustomerAccessTokenCreateInput!) {
+//     customerAccessTokenCreate(input: $input) {
+//       customerUserErrors {
+//         code
+//         field
+//         message
+//       }
+//       customerAccessToken {
+//         accessToken
+//         expiresAt
+//       }
+//     }
+//   }
+// `;
 
-const cartLinesUpdateMutation = gql`
+export const cartLinesUpdateMutation = gql`
   mutation cartLinesUpdate($cartId: ID!, $lines: [CartLineUpdateInput!]!) {
     cartLinesUpdate(cartId: $cartId, lines: $lines) {
-      cart {
-        id
-        lines(first: 250) {
-          edges {
-            node {
-              id
-              quantity
-              merchandise {
-                ... on ProductVariant {
-                  id
-                }
-              }
-            }
-          }
-        }
-        estimatedCost {
-          totalAmount {
-            amount
-            currencyCode
-          }
-          subtotalAmount {
-            amount
-            currencyCode
-          }
-          totalTaxAmount {
-            amount
-            currencyCode
-          }
-          totalDutyAmount {
-            amount
-            currencyCode
-          }
-        }
-      }
+      ${cartQueryFragmentWithoutId}
     }
   }
 `;
 
-const addNewLineItemMutation = gql`
+export const addNewLineItemMutation = gql`
   mutation cartLinesAdd($lines: [CartLineInput!]!, $cartId: ID!) {
     cartLinesAdd(lines: $lines, cartId: $cartId) {
-      cart {
-        id
-        lines(first: 250) {
-          edges {
-            node {
-              id
-              quantity
-              merchandise {
-                ... on ProductVariant {
-                  id
-                }
-              }
-            }
-          }
-        }
-        estimatedCost {
-          totalAmount {
-            amount
-            currencyCode
-          }
-          subtotalAmount {
-            amount
-            currencyCode
-          }
-          totalTaxAmount {
-            amount
-            currencyCode
-          }
-          totalDutyAmount {
-            amount
-            currencyCode
-          }
-        }
-      }
+      ${cartQueryFragmentWithoutId}
       userErrors {
         code
         field
         message
+      }
+    }
+  }
+`;
+
+export const retrieveCartQuery = gql`
+  query ($id: ID!) {
+    ${cartQueryFragment}
+  }
+`;
+
+export const getCollectionByHandleQuery = gql`
+  {
+    shop {
+      collectionByHandle(handle: "always-in-stock") {
+        products(first: 10) {
+          edges {
+            node {
+              id
+              handle
+              tags
+              priceRange {
+                minVariantPrice {
+                  amount
+                }
+              }
+              images(first: 1) {
+                edges {
+                  node {
+                    originalSrc
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
   }

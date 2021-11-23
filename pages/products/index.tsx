@@ -2,9 +2,10 @@ import Error from "next/error";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import Link from "next/link";
-// import ProductsPage from "../../components/ProductsPage/ProductsPage";
+import client from "../../lib/apollo";
 
-import { ShopifyData } from "../../lib/shopify";
+import { gql } from "@apollo/client";
+// import ProductsPage from "../../components/ProductsPage/ProductsPage";
 
 function Products({ products }) {
   //   console.log(JSON.stringify(products, null, 40));
@@ -37,8 +38,6 @@ function Products({ products }) {
   );
 }
 
-const gql = String.raw;
-
 const pageQuery = gql`
   {
     shop {
@@ -70,9 +69,7 @@ const pageQuery = gql`
 `;
 
 export async function getStaticProps() {
-  const { data } = await ShopifyData(pageQuery);
-
-  console.log(data.shop.collectionByHandle.products.edges);
+  const { data } = await client.query({ query: pageQuery });
 
   return {
     props: {

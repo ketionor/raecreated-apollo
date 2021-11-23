@@ -1,21 +1,15 @@
-import { useEffect } from "react";
 import "../styles/globals.css";
 import Layout from "../components/Layout";
-import { useAtom } from "jotai";
-import { userAtom } from "../lib/atoms";
+import { ApolloProvider } from "@apollo/client";
+import client from "../lib/apollo";
 
 function MyApp({ Component, pageProps }) {
-  const [user, setUser] = useAtom(userAtom);
-  useEffect(() => {
-    if (user.isLoggedIn) {
-    } else if (!user.isLoggedIn) {
-    }
-  }, []);
-
   return (
-    <Layout>
-      <Component {...pageProps} />;
-    </Layout>
+    <ApolloProvider client={client}>
+      <Layout>
+        <Component {...pageProps} />;
+      </Layout>
+    </ApolloProvider>
   );
 }
 

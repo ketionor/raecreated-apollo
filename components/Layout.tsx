@@ -1,16 +1,29 @@
 import React from "react";
 import Nav from "./Nav/Nav";
 
-import { atom, useAtom, Provider } from "jotai";
-
-export const countAtom = atom(0);
 const Layout = ({ children }) => {
-  const [count, setCount] = useAtom(countAtom);
   return (
-    <Provider>
-      <Nav />
-      {children}
-    </Provider>
+    <>
+      <div className="global-container">
+        <Nav />
+        <main className="content-container">{children}</main>
+      </div>
+
+      <style jsx>
+        {`
+          .global-container {
+            width: 100vw;
+            height: 100vh;
+          }
+
+          .content-container {
+            width: 100%;
+            margin: 1rem;
+            max-width: 1024px;
+          }
+        `}
+      </style>
+    </>
   );
 };
 
