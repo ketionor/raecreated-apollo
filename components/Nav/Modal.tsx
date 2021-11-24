@@ -44,7 +44,7 @@ const Modal = ({ links, toggle }: ModalTypes) => {
               if (to[0] === "/") {
                 return (
                   <li onClick={toggle}>
-                    <Link href={to} activeClassName="activeLink" passHref>
+                    <Link href={to} passHref>
                       <a>{name}</a>
                     </Link>
                   </li>

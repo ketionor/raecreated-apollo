@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { createAccessToken } from "../lib/shopify";
+// import { createAccessToken } from "../lib/shopify";
 import { useAtom } from "jotai";
 import { userAtom } from "../lib/atoms";
 
@@ -17,12 +17,12 @@ const Login = () => {
   };
 
   const handleSubmit = async () => {
-    const data = await createAccessToken(email, password);
-    const accessToken =
-      data.customerAccessTokenCreate.customerAccessToken.accessToken;
+    // const data = await createAccessToken(email, password);
+    // const accessToken =
+    //   data.customerAccessTokenCreate.customerAccessToken.accessToken;
     setUser({
       isLoggedIn: true,
-      accessToken,
+      // accessToken,
     });
   };
 

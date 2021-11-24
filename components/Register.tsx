@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { createCustomer } from "../lib/shopify";
+// import { createCustomer } from "../lib/shopify";
 
 const Register = () => {
   const [email, setEmail] = useState("");
@@ -19,14 +19,14 @@ const Register = () => {
   };
 
   const handleSubmit = () => {
-    createCustomer(
-      email,
-      password,
-      acceptsMarketing,
-      firstName,
-      lastName,
-      phone
-    );
+    // createCustomer(
+    //   email,
+    //   password,
+    //   acceptsMarketing,
+    //   firstName,
+    //   lastName,
+    //   phone
+    // );
   };
 
   return (

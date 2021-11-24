@@ -11,15 +11,15 @@ const Cart = (data) => {
 
   const populatePage = () => {
     const cartItems = cart.lines.edges.map((item, idx) => {
-      const featuredImage =
-        item.node.merchandise.product.images.edges[0].node.originalSrc;
+      // const featuredImage =
+      //   item.node.merchandise.product.images.edges[0].node.originalSrc;
       const quantity = item.node.quantity;
 
       //this is a situation where unique keys may be important
       return (
         <span key={idx}>
           <h2>{quantity}</h2>
-          <Image height={1} width={1} src={featuredImage} />
+          {/* <Image height={1} width={1} src={featuredImage} /> */}
         </span>
       );
     });
