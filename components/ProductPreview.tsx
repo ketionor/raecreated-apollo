@@ -21,28 +21,61 @@ const ProductPreview = ({
 }: ProductPreview) => {
   const [quantity, setQuantity] = useState<number>(1);
 
-  const handleChangeQuantity = (e) => {
-    setQuantity(e.target.value);
-  };
-
   return (
     <>
       <div className="single-product">
         <Link href={`/products/${slug}`} passHref>
           <div className="inner-product-container">
             <Image
-              height={100}
-              width={100}
+              height={1}
+              width={1}
               layout="responsive"
               src={featuredImage}
             />
-            <h1>{title}</h1>
-            <h2>{price}</h2>
+            <div className="title-container">
+              <p className="price">{`$${price}0`}</p>
+              <p className="title">{title}</p>
+            </div>
           </div>
         </Link>
-        <QuanititySelector quantity={quantity} setQuantity={setQuantity} />
-        <AddToCartButton id={id} quantity={quantity} />
+        <div className="add-to-cart">
+          <QuanititySelector quantity={quantity} setQuantity={setQuantity} />
+          <AddToCartButton id={id} quantity={quantity} />
+        </div>
       </div>
+
+      <style jsx>
+        {`
+          .single-product {
+            width: 100%;
+            margin-bottom: 1rem;
+          }
+
+          .title-container {
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          }
+
+          .price,
+          .title {
+            margin: 0;
+            padding: 0;
+          }
+
+          .title {
+            text-align: right;
+            font-size: 1.5rem;
+          }
+
+          .add-to-cart {
+            display: flex;
+            justify-content: flex-end;
+          }
+        `}
+      </style>
     </>
   );
 };

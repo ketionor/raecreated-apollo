@@ -239,6 +239,7 @@ export const getCollectionByHandleQuery = gql`
         products(first: 10) {
           edges {
             node {
+              title
               id
               handle
               tags
