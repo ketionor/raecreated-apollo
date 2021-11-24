@@ -5,6 +5,7 @@ import { getCollectionByHandleQuery } from "../../lib/shopify";
 
 import { gql } from "@apollo/client";
 import AddToCartButton from "../../components/AddToCartButton";
+import ProductPreview from "../../components/ProductPreview";
 // import ProductsPage from "../../components/ProductsPage/ProductsPage";
 
 function Products({ products }) {
@@ -22,19 +23,13 @@ function Products({ products }) {
 
           return (
             <>
-              <Link href={`/products/${slug}`} passHref>
-                <div className="single-product">
-                  <Image
-                    height={100}
-                    width={100}
-                    layout="responsive"
-                    src={featuredImage}
-                  />
-                  <h1>{title}</h1>
-                  <h2>{price}</h2>
-                </div>
-              </Link>
-              <AddToCartButton id={id} quantity={1} />
+              <ProductPreview
+                featuredImage={featuredImage}
+                title={title}
+                price={price}
+                slug={slug}
+                id={id}
+              />
             </>
           );
         })}
@@ -51,6 +46,8 @@ function Products({ products }) {
 
           .single-product {
             width: 75%;
+            display: flex;
+            flex-direction: column;
           }
 
           @media only screen and (min-width: 768px) {

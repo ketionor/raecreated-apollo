@@ -73,7 +73,8 @@ const AddToCartButton = ({ id, quantity }: AddToCartButton) => {
       if (THIS_ITEM_IN_CART) {
         //update quantity
         const THIS_LINE_id = THIS_ITEM_IN_CART.node.id;
-        let newQuantity = THIS_ITEM_IN_CART.node.quantity + quantity;
+        let newQuantity: number =
+          Number(THIS_ITEM_IN_CART.node.quantity) + Number(quantity);
         updateQuantity({
           variables: {
             cartId: user.cartId,
@@ -94,7 +95,30 @@ const AddToCartButton = ({ id, quantity }: AddToCartButton) => {
     }
   };
 
-  return <button onClick={handleAddToCart}>Add to Cart</button>;
+  return (
+    <>
+      <button onClick={handleAddToCart} className="add-to-cart-button">
+        Add to Cart
+      </button>
+
+      <style jsx>
+        {`
+          .add-to-cart-button {
+            background-color: black;
+            color: white;
+            border: 2px solid white;
+            transition: background-color 0.25s, color 0.25s;
+          }
+
+          .add-to-cart-button:hover {
+            cursor: pointer;
+            background-color: white;
+            color: black;
+          }
+        `}
+      </style>
+    </>
+  );
 };
 
 export default AddToCartButton;
