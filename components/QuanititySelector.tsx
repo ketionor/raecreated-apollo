@@ -41,7 +41,7 @@ const QuanititySelector = ({ quantity, setQuantity }: QuantitySelector) => {
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="feather feather-minus"
+              className="plus-minus"
             >
               <line x1="5" y1="12" x2="19" y2="12"></line>
             </svg>
@@ -82,7 +82,7 @@ const QuanititySelector = ({ quantity, setQuantity }: QuantitySelector) => {
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="feather feather-plus"
+              className="plus-minus"
             >
               <line x1="12" y1="5" x2="12" y2="19"></line>
               <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -95,11 +95,11 @@ const QuanititySelector = ({ quantity, setQuantity }: QuantitySelector) => {
         {`
           .incrementer-container {
             display: flex;
-            justify-content: space-evenly;
+            justify-content: space-between;
             height: 30px;
-            width: 60px;
+            width: 70px;
             border-radius: 5px;
-            background-color: white;
+
             margin: 0.25rem;
           }
 
@@ -108,8 +108,12 @@ const QuanititySelector = ({ quantity, setQuantity }: QuantitySelector) => {
             padding-bottom: 1px;
           }
 
+          .plus-minus {
+            stroke: white;
+          }
+
           .increment-button {
-            background-color: white;
+            background-color: black;
             border: none;
             width: 20px;
             height: 100%;
@@ -121,23 +125,12 @@ const QuanititySelector = ({ quantity, setQuantity }: QuantitySelector) => {
             cursor: pointer;
           }
 
-          .increment-button-left {
-            border-top-left-radius: 5px;
-            border-bottom-left-radius: 5px;
-            border-right: 1px solid rgba(0, 255, 0, 0.509);
-          }
-
-          .increment-button-right {
-            border-top-right-radius: 5px;
-            border-bottom-right-radius: 5px;
-            border-left: 1px solid rgba(0, 255, 0, 0.509);
-          }
-
           .number {
             width: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
+            border-radius: 4px;
             background-color: white;
           }
 

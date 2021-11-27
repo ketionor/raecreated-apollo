@@ -14,11 +14,10 @@ import {
 interface AddToCartButton {
   id: string;
   quantity: number;
+  type: "icon" | "text";
 }
 
-//created this component for the sole purpose of housing the
-//sizable add to cart function
-const AddToCartButton = ({ id, quantity }: AddToCartButton) => {
+const AddToCartButton = ({ id, quantity, type }: AddToCartButton) => {
   const [user, setUser] = useAtom(userAtom);
 
   //creates a new cart, adds line item to it
@@ -55,7 +54,7 @@ const AddToCartButton = ({ id, quantity }: AddToCartButton) => {
 
   const handleAddToCart = async () => {
     if (user.cartId) {
-      //if the user already has a cart in local storage
+      //...if the user already has a cart in local storage
 
       //first, query the cache to get the latest version on the cart
       const { cart } = await client.readQuery({
@@ -70,6 +69,7 @@ const AddToCartButton = ({ id, quantity }: AddToCartButton) => {
         (element) => element.node.merchandise.id === id
       );
 
+      //...and the item already exists in the cart
       if (THIS_ITEM_IN_CART) {
         //update quantity
         const THIS_LINE_id = THIS_ITEM_IN_CART.node.id;
@@ -84,36 +84,80 @@ const AddToCartButton = ({ id, quantity }: AddToCartButton) => {
             },
           },
         });
-      } else {
-        //create new line item
-        addToCart();
+
+        return;
       }
-    } else {
-      //if the user does not already have a cart
+
+      //...or if it isn't in the cart already
+      if (!THIS_ITEM_IN_CART) {
+        addToCart();
+        return;
+      }
+    }
+
+    if (!user.cartId) {
+      //...and lastly, if no cart currently exists, create one
       const response = await createCart();
       setUser({ ...user, cartId: response.data.cartCreate.cart.id });
+      return;
     }
   };
 
   return (
     <>
-      <button onClick={handleAddToCart} className="add-to-cart-button">
-        Add to Cart
+      <button
+        onClick={handleAddToCart}
+        className={
+          type === "icon"
+            ? "add-to-cart-button-icon"
+            : "add-to-cart-button-text"
+        }
+      >
+        {type === "icon" ? (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="#000000"
+            className="add-to-cart-icon"
+          >
+            <path d="M0 0h24v24H0zm18.31 6l-2.76 5z" fill="none" />
+            <path d="M11 9h2V6h3V4h-3V1h-2v3H8v2h3v3zm-4 9c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2zm-9.83-3.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01L19.42 4h-.01l-1.1 2-2.76 5H8.53l-.13-.27L6.16 6l-.95-2-.94-2H1v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.13 0-.25-.11-.25-.25z" />
+          </svg>
+        ) : (
+          "Add to Cart"
+        )}
       </button>
 
       <style jsx>
         {`
-          .add-to-cart-button {
+          .add-to-cart-button-text {
             background-color: black;
+            border: 4px solid white;
             color: white;
-            border: 2px solid white;
+
             transition: background-color 0.25s, color 0.25s;
+            height: 32px;
           }
 
-          .add-to-cart-button:hover {
+          .add-to-cart-button-text:hover {
             cursor: pointer;
             background-color: white;
             color: black;
+          }
+
+          .add-to-cart-button-icon {
+            background-color: transparent;
+            border: none;
+          }
+
+          .add-to-cart-icon {
+            fill: white;
+            height: 32px;
+            width: 32px;
+          }
+
+          .add-to-cart-icon:hover {
+            fill: lime;
           }
         `}
       </style>

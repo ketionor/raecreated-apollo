@@ -31,6 +31,7 @@ const ProductPreview = ({
               width={1}
               layout="responsive"
               src={featuredImage}
+              alt={title}
             />
             <div className="title-container">
               <p className="price">{`$${price}0`}</p>
@@ -40,7 +41,7 @@ const ProductPreview = ({
         </Link>
         <div className="add-to-cart">
           <QuanititySelector quantity={quantity} setQuantity={setQuantity} />
-          <AddToCartButton id={id} quantity={quantity} />
+          <AddToCartButton id={id} quantity={quantity} type="icon" />
         </div>
       </div>
 
@@ -72,7 +73,8 @@ const ProductPreview = ({
 
           .add-to-cart {
             display: flex;
-            justify-content: flex-end;
+            align-items: center;
+            justify-content: space-between;
           }
         `}
       </style>

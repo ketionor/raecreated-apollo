@@ -10,9 +10,11 @@ import {
 import { useLazyQuery } from "@apollo/client";
 import client from "../../lib/apollo";
 import AddToCartButton from "../../components/AddToCartButton";
+import QuanititySelector from "../../components/QuanititySelector";
 
-function Product({ TITLE, FEATURED_IMG, ID, HTML }) {
-  const [quantity, setQuantity] = useState(1);
+function Product({ title, featuredImg, images, id, html }) {
+  console.log(images);
+  const [quantity, setQuantity] = useState<number>(1);
   const [user, setUser] = useAtom(userAtom);
 
   const handleBuyNow = async () => {
@@ -39,32 +41,27 @@ function Product({ TITLE, FEATURED_IMG, ID, HTML }) {
               layout="responsive"
               height={1}
               width={1}
-              src={FEATURED_IMG}
+              src={featuredImg}
               alt="some alt"
             />
           </div>
           <div className="sub-image-container">
-            {/* {images.map((img, idx) => (
+            {images.map((img, idx) => (
               <span key={idx} className="sub-image">
                 <Image height={100} width={100} src={img.node.originalSrc} />
               </span>
-            ))} */}
+            ))}
           </div>
         </div>
-        <div className="info-container">
-          <h1 className="title">{TITLE}</h1>
+        <div className="purchase-container">
           {/* <h2>{price}</h2> */}
-          <input
-            type="number"
-            value={quantity}
-            onChange={handleUpdateQuantity}
-          />
-          <button onClick={handleBuyNow}>Buy it Now</button>
-          {/* <button onClick={handleAddToCart}>Add to Cart</button> */}
-          <AddToCartButton id={ID} quantity={quantity} />
+          <QuanititySelector quantity={quantity} setQuantity={setQuantity} />
+          {/* <button onClick={handleBuyNow}>Buy Now</button> */}
+          <AddToCartButton id={id} quantity={quantity} type="icon" />
         </div>
+        <h1 className="title">{title}</h1>
         <div className="description">
-          <div dangerouslySetInnerHTML={{ __html: HTML }} />
+          <div dangerouslySetInnerHTML={{ __html: html }} />
         </div>
       </div>
 
@@ -90,6 +87,12 @@ function Product({ TITLE, FEATURED_IMG, ID, HTML }) {
             margin-left: 1rem;
           }
 
+          .purchase-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          }
+
           .title {
             font-size: 2em;
           }
@@ -102,20 +105,21 @@ function Product({ TITLE, FEATURED_IMG, ID, HTML }) {
 export async function getStaticProps({ params }) {
   const { data } = await getProductByHandle(params.slug);
 
-  // console.log(data.shop.productByHandle);
-
-  const TITLE = data.shop.productByHandle.title;
-  const FEATURED_IMG =
+  const title: string = data.shop.productByHandle.title;
+  const featuredImg: string =
     data.shop.productByHandle.images.edges[0].node.originalSrc;
-  const ID = data.shop.productByHandle.variants.edges[0].node.id;
-  const HTML = data.shop.productByHandle.descriptionHtml;
+  const images: [] = data.shop.productByHandle.images.edges.slice(1);
+  const id: string = data.shop.productByHandle.variants.edges[0].node.id;
+  const html: string = data.shop.productByHandle.descriptionHtml;
 
+  console.log(images);
   return {
     props: {
-      TITLE,
-      FEATURED_IMG,
-      ID,
-      HTML,
+      title,
+      featuredImg,
+      images,
+      id,
+      html,
     },
   };
 }
