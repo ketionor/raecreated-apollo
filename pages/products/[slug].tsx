@@ -12,10 +12,11 @@ import client from "../../lib/apollo";
 import AddToCartButton from "../../components/AddToCartButton";
 import QuanititySelector from "../../components/QuanititySelector";
 
-function Product({ title, featuredImg, images, id, html }) {
+function Product({ title, images, id, html }) {
   console.log(images);
   const [quantity, setQuantity] = useState<number>(1);
   const [readMore, setReadMore] = useState(false);
+  const [featuredImg, setFeaturedImg] = useState<number>(0);
   const [user, setUser] = useAtom(userAtom);
 
   const handleBuyNow = async () => {
@@ -42,14 +43,23 @@ function Product({ title, featuredImg, images, id, html }) {
               layout="responsive"
               height={1}
               width={1}
-              src={featuredImg}
+              src={images[featuredImg].node.originalSrc}
               alt="some alt"
             />
           </div>
           <div className="sub-image-container">
             {images.map((img, idx) => (
-              <span key={idx} className="sub-image">
-                <Image height={100} width={100} src={img.node.originalSrc} />
+              <span
+                key={idx}
+                className="sub-image"
+                onClick={() => setFeaturedImg(idx)}
+              >
+                <Image
+                  height={1}
+                  width={1}
+                  src={img.node.originalSrc}
+                  layout="responsive"
+                />
               </span>
             ))}
           </div>
@@ -70,7 +80,7 @@ function Product({ title, featuredImg, images, id, html }) {
         >
           {`Show ${readMore ? "Less" : "More"}`}
         </p>
-
+        <hr />
         <div className="purchase-container">
           {/* <h2>{price}</h2> */}
           <span className="quantity-selector">
@@ -103,6 +113,10 @@ function Product({ title, featuredImg, images, id, html }) {
 
           .sub-image:not(:first-child) {
             margin-left: 1rem;
+          }
+
+          .sub-image {
+            flex-grow: 1;
           }
 
           .purchase-container {
@@ -162,7 +176,7 @@ export async function getStaticProps({ params }) {
   const title: string = data.shop.productByHandle.title;
   const featuredImg: string =
     data.shop.productByHandle.images.edges[0].node.originalSrc;
-  const images: [] = data.shop.productByHandle.images.edges.slice(1);
+  const images: [] = data.shop.productByHandle.images.edges;
   const id: string = data.shop.productByHandle.variants.edges[0].node.id;
   const html: string = data.shop.productByHandle.descriptionHtml;
 
