@@ -15,6 +15,7 @@ import QuanititySelector from "../../components/QuanititySelector";
 function Product({ title, featuredImg, images, id, html }) {
   console.log(images);
   const [quantity, setQuantity] = useState<number>(1);
+  const [readMore, setReadMore] = useState(false);
   const [user, setUser] = useAtom(userAtom);
 
   const handleBuyNow = async () => {
@@ -53,15 +54,32 @@ function Product({ title, featuredImg, images, id, html }) {
             ))}
           </div>
         </div>
+        <h1 className="title">{title}</h1>
+        <div className={readMore ? "description" : "description fade-bottom"}>
+          <div
+            dangerouslySetInnerHTML={{
+              __html: `${readMore ? html : html.slice(0, 150)}`,
+            }}
+          />
+        </div>
+        <p
+          className="read-more"
+          onClick={() => {
+            setReadMore(!readMore);
+          }}
+        >
+          {`Show ${readMore ? "Less" : "More"}`}
+        </p>
+
         <div className="purchase-container">
           {/* <h2>{price}</h2> */}
-          <QuanititySelector quantity={quantity} setQuantity={setQuantity} />
+          <span className="quantity-selector">
+            <QuanititySelector quantity={quantity} setQuantity={setQuantity} />
+          </span>
           {/* <button onClick={handleBuyNow}>Buy Now</button> */}
-          <AddToCartButton id={id} quantity={quantity} type="icon" />
-        </div>
-        <h1 className="title">{title}</h1>
-        <div className="description">
-          <div dangerouslySetInnerHTML={{ __html: html }} />
+          <span onClick={() => {}} className="add-to-cart-button">
+            <AddToCartButton id={id} quantity={quantity} type="text" />
+          </span>
         </div>
       </div>
 
@@ -89,12 +107,48 @@ function Product({ title, featuredImg, images, id, html }) {
 
           .purchase-container {
             display: flex;
+            flex-direction: column;
             justify-content: space-between;
             align-items: center;
           }
 
+          .description {
+          }
+
+          .fade-bottom {
+            -webkit-mask-image: linear-gradient(
+              to bottom,
+              black 50%,
+              transparent 100%
+            );
+            mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+          }
+
+          .quantity-selector {
+            height: 30px;
+            width: 50%;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+          }
+
+          .add-to-cart-button {
+            width: 100%;
+            height: 50px;
+          }
+
           .title {
             font-size: 2em;
+          }
+
+          .read-more {
+            text-align: center;
+            font-size: small;
+            font-style: italic;
+            text-decoration: underline;
+          }
+
+          .read-more:hover {
+            cursor: pointer;
           }
         `}
       </style>
