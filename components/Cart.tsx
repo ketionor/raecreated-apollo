@@ -1,40 +1,64 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-
+import { useLazyQuery, useMutation } from "@apollo/client";
+import { retrieveCartQuery, cartLinesUpdateMutation } from "../lib/shopify";
 import { useAtom } from "jotai";
-import { cartAtom } from "../lib/atoms";
+import { userAtom } from "../lib/atoms";
+import CartItem from "./CartItem";
 
-const Cart = (data) => {
-  const [cart, setCart] = useAtom(cartAtom);
+const Cart = () => {
   const [cartElements, setCartElements] = useState([]);
-  //   console.log("from apollo", data);
+  const [user, setUser] = useAtom(userAtom);
 
-  const populatePage = () => {
-    const cartItems = cart.lines.edges.map((item, idx) => {
-      // const featuredImage =
-      //   item.node.merchandise.product.images.edges[0].node.originalSrc;
-      const quantity = item.node.quantity;
+  const [retrieveCart, { loading, error, data }] = useLazyQuery(
+    retrieveCartQuery,
+    {
+      variables: {
+        id: user.cartId,
+      },
+    }
+  );
 
-      //this is a situation where unique keys may be important
-      return (
-        <span key={idx}>
-          <h2>{quantity}</h2>
-          {/* <Image height={1} width={1} src={featuredImage} /> */}
-        </span>
-      );
-    });
+  const [itemQuanityUpdate, itemQuantityUpdateData] = useMutation(
+    cartLinesUpdateMutation
+  );
 
-    return cartItems;
+  const log = () => {
+    console.log(data);
   };
 
   useEffect(() => {
-    setCartElements(populatePage());
+    retrieveCart();
   }, []);
 
   return (
-    <div>
+    <>
       <h1>Items in your cart</h1>
-    </div>
+      {data?.cart.lines.edges.map((element, idx) => {
+        const itemId = element.node.id;
+        const quantity = element.node.quantity;
+        const title = element.node.merchandise.product.title;
+        const featuredImage =
+          element.node.merchandise.product.images.edges[0].node.originalSrc;
+        return (
+          <CartItem
+            key={itemId}
+            featuredImage={featuredImage}
+            itemId={itemId}
+            quantity={quantity}
+            title={title}
+            itemQuantityUpdate={itemQuanityUpdate}
+          />
+        );
+      })}
+      <button onClick={log}>l;kj</button>
+
+      <style jsx>{`
+        .product-image {
+          width: 100%;
+        }
+      `}</style>
+    </>
   );
 };
 

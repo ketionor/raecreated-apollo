@@ -3,9 +3,22 @@ import Login from "../components/Login";
 
 const login = () => {
   return (
-    <div>
-      <Login />
-    </div>
+    <>
+      <div className="page-container">
+        <Login />
+      </div>
+      <style jsx>
+        {`
+          .page-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+        `}
+      </style>
+    </>
   );
 };
 

@@ -58,7 +58,7 @@ const Modal = ({ links, toggle }: ModalTypes) => {
               }
             })}
             <li>
-              {!user.isLoggedIn && (
+              {!user.accessToken && (
                 <>
                   <button>Log In</button> <button>Register</button>
                 </>

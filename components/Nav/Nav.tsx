@@ -10,8 +10,8 @@ import { AnimatePresence } from "framer-motion";
 const links = [
   { name: "Home", to: "/" },
   { name: "About", to: "/about" },
-  { name: "Blog", to: "/blog" },
   { name: "In Stock", to: "/products" },
+  { name: "Cart", to: "/cart" },
   { name: "Contact", to: "/contact" },
 ];
 
@@ -68,9 +68,8 @@ const Nav = () => {
       <style jsx>
         {`
           .container {
-            --hamburger-size: 40px;
+            --hamburger-size: 30px;
             --hamburger-color: white;
-            --padding: 2rem;
             display: flex;
             justify-content: center;
             width: 100%;

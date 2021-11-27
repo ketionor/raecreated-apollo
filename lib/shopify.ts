@@ -174,36 +174,36 @@ export const createCartMutation = gql`
 //   }
 // `;
 
-// const createCustomerMutation = gql`
-//   mutation customerCreate($input: CustomerCreateInput!) {
-//     customerCreate(input: $input) {
-//       customerUserErrors {
-//         code
-//         field
-//         message
-//       }
-//       customer {
-//         id
-//       }
-//     }
-//   }
-// `;
+export const createCustomerMutation = gql`
+  mutation customerCreate($input: CustomerCreateInput!) {
+    customerCreate(input: $input) {
+      customerUserErrors {
+        code
+        field
+        message
+      }
+      customer {
+        id
+      }
+    }
+  }
+`;
 
-// const createAccessTokenMutation = gql`
-//   mutation customerAccessTokenCreate($input: CustomerAccessTokenCreateInput!) {
-//     customerAccessTokenCreate(input: $input) {
-//       customerUserErrors {
-//         code
-//         field
-//         message
-//       }
-//       customerAccessToken {
-//         accessToken
-//         expiresAt
-//       }
-//     }
-//   }
-// `;
+export const createAccessTokenMutation = gql`
+  mutation customerAccessTokenCreate($input: CustomerAccessTokenCreateInput!) {
+    customerAccessTokenCreate(input: $input) {
+      customerUserErrors {
+        code
+        field
+        message
+      }
+      customerAccessToken {
+        accessToken
+        expiresAt
+      }
+    }
+  }
+`;
 
 export const cartLinesUpdateMutation = gql`
   mutation cartLinesUpdate($cartId: ID!, $lines: [CartLineUpdateInput!]!) {
@@ -268,4 +268,18 @@ export const getCollectionByHandleQuery = gql`
       }
     }
   }
+`;
+
+export const cartBuyerIdentityUpdateMutation = gql`
+mutation cartBuyerIdentityUpdate($cartId: ID!, $buyerIdentity: CartBuyerIdentityInput!) {
+  cartBuyerIdentityUpdate(cartId: $cartId, buyerIdentity: $buyerIdentity) {
+    ${cartQueryFragmentWithoutId}
+    userErrors {
+      code
+      field
+      message
+    }
+  }
+}
+
 `;
