@@ -51,7 +51,9 @@ const Cart = () => {
           />
         );
       })}
-      <button onClick={log}>l;kj</button>
+      <a href={user.checkoutUrl} rel="noopener noreferrer">
+        <button onClick={log}>Proceed to checkout</button>
+      </a>
 
       <style jsx>{`
         .product-image {

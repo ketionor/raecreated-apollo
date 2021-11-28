@@ -5,6 +5,7 @@ interface User {
   customerId?: string;
   accessToken?: string;
   cartId?: string;
+  checkoutUrl?: string;
 }
 
 export const userAtom = atomWithStorage<User>("userInfo", {});

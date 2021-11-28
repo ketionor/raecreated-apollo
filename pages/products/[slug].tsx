@@ -64,32 +64,37 @@ function Product({ title, images, id, html }) {
             ))}
           </div>
         </div>
-        <h1 className="title">{title}</h1>
-        <div className={readMore ? "description" : "description fade-bottom"}>
-          <div
-            dangerouslySetInnerHTML={{
-              __html: `${readMore ? html : html.slice(0, 150)}`,
+        <div className="right-container">
+          <h1 className="title">{title}</h1>
+          <div className={readMore ? "description" : "description fade-bottom"}>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: `${readMore ? html : html.slice(0, 150)}`,
+              }}
+            />
+          </div>
+          <p
+            className="read-more"
+            onClick={() => {
+              setReadMore(!readMore);
             }}
-          />
-        </div>
-        <p
-          className="read-more"
-          onClick={() => {
-            setReadMore(!readMore);
-          }}
-        >
-          {`Show ${readMore ? "Less" : "More"}`}
-        </p>
-        <hr />
-        <div className="purchase-container">
-          {/* <h2>{price}</h2> */}
-          <span className="quantity-selector">
-            <QuanititySelector quantity={quantity} setQuantity={setQuantity} />
-          </span>
-          {/* <button onClick={handleBuyNow}>Buy Now</button> */}
-          <span onClick={() => {}} className="add-to-cart-button">
-            <AddToCartButton id={id} quantity={quantity} type="text" />
-          </span>
+          >
+            {`Show ${readMore ? "Less" : "More"}`}
+          </p>
+          <hr />
+          <div className="purchase-container">
+            {/* <h2>{price}</h2> */}
+            <span className="quantity-selector">
+              <QuanititySelector
+                quantity={quantity}
+                setQuantity={setQuantity}
+              />
+            </span>
+            {/* <button onClick={handleBuyNow}>Buy Now</button> */}
+            <span onClick={() => {}} className="add-to-cart-button">
+              <AddToCartButton id={id} quantity={quantity} type="text" />
+            </span>
+          </div>
         </div>
       </div>
 
@@ -163,6 +168,23 @@ function Product({ title, images, id, html }) {
 
           .read-more:hover {
             cursor: pointer;
+          }
+
+          @media only screen and (min-width: 768px) {
+            .page-container {
+              display: flex;
+              justify-content: space-between;
+            }
+
+            .image-container {
+              max-width: 45%;
+              flex-grow: 1;
+            }
+
+            .right-container {
+              max-width: 45%;
+              flex-grow: 1;
+            }
           }
         `}
       </style>

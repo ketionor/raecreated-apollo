@@ -85,6 +85,7 @@ export async function getProductByHandle(handle: String) {
 const cartQueryFragment = `
     cart(id: $id) {
       id
+      checkoutUrl
       lines(first: 250) {
         edges {
           node {
@@ -121,6 +122,7 @@ const cartQueryFragment = `
 const cartQueryFragmentWithoutId = `
     cart {
       id
+      checkoutUrl
       lines(first: 250) {
         edges {
           node {
@@ -279,6 +281,15 @@ mutation cartBuyerIdentityUpdate($cartId: ID!, $buyerIdentity: CartBuyerIdentity
       field
       message
     }
+  }
+}
+
+`;
+
+export const cartLinesRemoveMutation = gql`
+mutation removeLines($cartId: ID!, $lineIds: [ID!]!) {
+  cartLinesRemove(cartId: $cartId, lineIds: $lineIds) {
+    ${cartQueryFragmentWithoutId}
   }
 }
 

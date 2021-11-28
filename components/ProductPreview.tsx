@@ -40,8 +40,12 @@ const ProductPreview = ({
           </div>
         </Link>
         <div className="add-to-cart">
-          <QuanititySelector quantity={quantity} setQuantity={setQuantity} />
-          <AddToCartButton id={id} quantity={quantity} type="icon" />
+          <span className="quantity-selector">
+            <QuanititySelector quantity={quantity} setQuantity={setQuantity} />
+          </span>
+          <span className="add-to-cart-button">
+            <AddToCartButton id={id} quantity={quantity} type="icon" />
+          </span>
         </div>
       </div>
 
@@ -75,6 +79,17 @@ const ProductPreview = ({
             display: flex;
             align-items: center;
             justify-content: space-between;
+            height: 50px;
+          }
+
+          .quantity-selector {
+            max-width: 35%;
+            height: 40px;
+          }
+
+          .add-to-cart-button {
+            height: 100%;
+            max-width: 45%;
           }
         `}
       </style>

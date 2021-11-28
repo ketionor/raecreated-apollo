@@ -3,6 +3,8 @@ import Image from "next/image";
 import QuanititySelector from "./QuanititySelector";
 import { userAtom } from "../lib/atoms";
 import { useAtom } from "jotai";
+import { useMutation } from "@apollo/client";
+import { cartLinesRemoveMutation } from "../lib/shopify";
 
 interface CartItem {
   featuredImage: string;
@@ -22,9 +24,16 @@ const CartItem = ({
   const [thisQuantity, setThisQuantity] = useState<number>(quantity);
   const [user, setUser] = useAtom(userAtom);
 
-  const handleUpdateQuantity = () => {};
+  const [removeItem, removeItemData] = useMutation(cartLinesRemoveMutation, {
+    variables: {
+      cartId: user.cartId,
+      lineIds: [itemId],
+    },
+  });
 
-  const removeItem = () => {};
+  const handleRemoveItem = () => {
+    removeItem();
+  };
 
   useEffect(() => {
     itemQuantityUpdate({
@@ -40,9 +49,10 @@ const CartItem = ({
 
   return (
     <>
+      <p className="title">{title}</p>
       <div className="cart-item-container">
         <div className="left-container">
-          <div className="image-container">
+          <span className="image-container">
             <Image
               alt={title}
               height={1}
@@ -50,14 +60,16 @@ const CartItem = ({
               src={featuredImage}
               layout="responsive"
             />
-          </div>
-          <p className="title">{title}</p>
+          </span>
         </div>
         <div className="right-container">
-          <QuanititySelector
-            quantity={thisQuantity}
-            setQuantity={setThisQuantity}
-          />
+          <span className="quantity-selector">
+            <QuanititySelector
+              quantity={thisQuantity}
+              setQuantity={setThisQuantity}
+            />
+          </span>
+          {/* trash can */}
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -69,6 +81,7 @@ const CartItem = ({
             strokeLinecap="round"
             strokeLinejoin="round"
             className="trash"
+            onClick={handleRemoveItem}
           >
             <polyline points="3 6 5 6 21 6"></polyline>
             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
@@ -77,24 +90,38 @@ const CartItem = ({
           </svg>
         </div>
       </div>
+      <hr />
 
       <style jsx>{`
         .left-container {
           display: flex;
+          align-items: center;
         }
 
         .right-container {
           display: flex;
+          align-items: center;
         }
 
         .image-container {
-          width: 50px;
-          height: 50px;
+          height: 100%;
+          width: 5rem;
+          margin-right: 1rem;
         }
 
         .cart-item-container {
+          width: 100%;
+          height: 5rem;
           display: flex;
           justify-content: space-between;
+          align-items: center;
+          margin-bottom: 1rem;
+        }
+
+        .quantity-selector {
+          height: 30px;
+          width: 100px;
+          margin-right: 1rem;
         }
       `}</style>
     </>

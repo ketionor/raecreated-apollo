@@ -1,6 +1,6 @@
+import { useState } from "react";
 import { useAtom } from "jotai";
 import { userAtom } from "../lib/atoms";
-import { motion } from "framer-motion";
 import client from "../lib/apollo";
 import { useMutation } from "@apollo/client";
 import {
@@ -20,6 +20,14 @@ interface AddToCartButton {
 
 const AddToCartButton = ({ id, quantity, type }: AddToCartButton) => {
   const [user, setUser] = useAtom(userAtom);
+  const [successMessage, setSuccessMessage] = useState(false);
+
+  const displaySuccessMessage = () => {
+    setSuccessMessage(true);
+    setTimeout(() => {
+      setSuccessMessage(false);
+    }, 2000);
+  };
 
   //creates a new cart, adds line item to it
   const [createCart, createCartData] = useMutation(createCartMutation, {
@@ -86,12 +94,14 @@ const AddToCartButton = ({ id, quantity, type }: AddToCartButton) => {
           },
         });
 
+        displaySuccessMessage();
         return;
       }
 
       //...or if it isn't in the cart already
       if (!THIS_ITEM_IN_CART) {
         addToCart();
+        setSuccessMessage(true);
         return;
       }
     }
@@ -99,52 +109,80 @@ const AddToCartButton = ({ id, quantity, type }: AddToCartButton) => {
     if (!user.cartId) {
       //...and lastly, if no cart currently exists, create one
       const response = await createCart();
-      setUser({ ...user, cartId: response.data.cartCreate.cart.id });
+      setUser({
+        ...user,
+        cartId: response.data.cartCreate.cart.id,
+        checkoutUrl: response.data.cartCreate.cart.checkoutUrl,
+      });
+      setSuccessMessage(true);
       return;
     }
   };
 
   return (
     <>
-      <button
-        onClick={handleAddToCart}
-        className={
-          type === "icon"
-            ? "add-to-cart-button-icon button"
-            : "add-to-cart-button-text button"
-        }
-      >
+      <div className="container">
         {type === "icon" ? (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="#000000"
-            className="add-to-cart-icon"
-          >
-            <path d="M0 0h24v24H0zm18.31 6l-2.76 5z" fill="none" />
-            <path d="M11 9h2V6h3V4h-3V1h-2v3H8v2h3v3zm-4 9c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2zm-9.83-3.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01L19.42 4h-.01l-1.1 2-2.76 5H8.53l-.13-.27L6.16 6l-.95-2-.94-2H1v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.13 0-.25-.11-.25-.25z" />
-          </svg>
+          <>
+            {successMessage ? (
+              <p className="success-message">Success!</p>
+            ) : (
+              <button
+                onClick={handleAddToCart}
+                className="button add-to-cart-button-icon"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  className="add-to-cart-icon"
+                >
+                  <path d="M0 0h24v24H0zm18.31 6l-2.76 5z" fill="none" />
+                  <path d="M11 9h2V6h3V4h-3V1h-2v3H8v2h3v3zm-4 9c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2zm-9.83-3.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01L19.42 4h-.01l-1.1 2-2.76 5H8.53l-.13-.27L6.16 6l-.95-2-.94-2H1v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.13 0-.25-.11-.25-.25z" />
+                </svg>
+              </button>
+            )}
+          </>
         ) : (
           <>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="#000000"
-              className="add-to-cart-icon"
+            <button
+              onClick={handleAddToCart}
+              className="button add-to-cart-button-text"
             >
-              <path d="M0 0h24v24H0zm18.31 6l-2.76 5z" fill="none" />
-              <path d="M11 9h2V6h3V4h-3V1h-2v3H8v2h3v3zm-4 9c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2zm-9.83-3.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01L19.42 4h-.01l-1.1 2-2.76 5H8.53l-.13-.27L6.16 6l-.95-2-.94-2H1v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.13 0-.25-.11-.25-.25z" />
-            </svg>
-            Add to Cart
+              {successMessage ? (
+                <p className="success-message">Success! Added to cart.</p>
+              ) : (
+                <>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    className="add-to-cart-icon"
+                  >
+                    <path d="M0 0h24v24H0zm18.31 6l-2.76 5z" fill="none" />
+                    <path d="M11 9h2V6h3V4h-3V1h-2v3H8v2h3v3zm-4 9c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2zm-9.83-3.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01L19.42 4h-.01l-1.1 2-2.76 5H8.53l-.13-.27L6.16 6l-.95-2-.94-2H1v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.13 0-.25-.11-.25-.25z" />
+                  </svg>
+                  <p>Add to Cart</p>
+                </>
+              )}
+            </button>
+            {successMessage && (
+              <p className="success-message">Success! Added to cart.</p>
+            )}
           </>
         )}
-      </button>
+      </div>
 
       <style jsx>
         {`
-          .button {
-            width: 100%;
+          .container {
+            display: flex;
+            flex-direction: column;
             height: 100%;
+          }
+          .button {
+            width: auto;
+            height: 100%;
+            padding: 0;
+            flex: 1;
           }
           .add-to-cart-button-text {
             background-color: black;
@@ -167,17 +205,25 @@ const AddToCartButton = ({ id, quantity, type }: AddToCartButton) => {
           .add-to-cart-button-icon {
             background-color: transparent;
             border: none;
+            height: 100%;
           }
 
           .add-to-cart-icon {
             fill: white;
-            height: 60%;
+            height: ${type === "icon" ? "100%" : "60%"};
+
             width: auto;
           }
 
           .add-to-cart-icon:hover {
             cursor: pointer;
             fill: lime;
+          }
+
+          .success-message {
+            color: lime;
+            font-size: small;
+            font-style: italic;
           }
         `}
       </style>

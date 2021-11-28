@@ -49,7 +49,7 @@ const QuanititySelector = ({ quantity, setQuantity }: QuantitySelector) => {
               animate="animate"
               exit={direction ? "exit" : "initial"}
               transition={{ ease: "easeOut", duration: 0.1 }}
-              style={{ color: "black" }}
+              style={{ color: "black", margin: 0 }}
               key={quantity}
             >
               {quantity}
@@ -84,29 +84,20 @@ const QuanititySelector = ({ quantity, setQuantity }: QuantitySelector) => {
           .incrementer-container {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             height: 100%;
             width: 100%;
             border-radius: 5px;
-
-            margin: 0.25rem;
-          }
-
-          .button-container {
-            padding-top: 1px;
-            padding-bottom: 1px;
           }
 
           .plus-minus {
+            flex: 1;
             stroke: white;
-            height: 100%;
-            width: auto;
           }
 
           .increment-button {
             background-color: black;
             border: none;
-            height: 100%;
-            width: 100%;
             padding: 0;
           }
 
@@ -115,7 +106,8 @@ const QuanititySelector = ({ quantity, setQuantity }: QuantitySelector) => {
           }
 
           .number {
-            width: 2rem;
+            flex: 1;
+            height: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -123,11 +115,6 @@ const QuanititySelector = ({ quantity, setQuantity }: QuantitySelector) => {
             background-color: white;
             box-shadow: inset 1px 1px 5px rgb(45, 45, 45),
               inset -5px -5px 10px white;
-          }
-
-          .number p {
-            margin: 0;
-            color: black;
           }
         `}
       </style>
