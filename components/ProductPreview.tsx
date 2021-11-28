@@ -23,9 +23,9 @@ const ProductPreview = ({
 
   return (
     <>
-      <div className="single-product">
+      <div className="w-full mb-4">
         <Link href={`/products/${slug}`} passHref>
-          <div className="inner-product-container">
+          <div className="">
             <Image
               height={1}
               width={1}
@@ -33,66 +33,21 @@ const ProductPreview = ({
               src={featuredImage}
               alt={title}
             />
-            <div className="title-container">
-              <p className="price">{`$${price}0`}</p>
-              <p className="title">{title}</p>
+            <div className="mt-2 mb-2 flex justify-between items-center">
+              <p className=" text-sm">{`$${Number(price).toFixed(2)}`}</p>
+              <p className="text-xl">{title}</p>
             </div>
           </div>
         </Link>
-        <div className="add-to-cart">
-          <span className="quantity-selector">
+        <div className="flex items-center justify-between h-14">
+          <span className="w-24 h-2/3">
             <QuanititySelector quantity={quantity} setQuantity={setQuantity} />
           </span>
-          <span className="add-to-cart-button">
+          <span className="w-auto h-2/3">
             <AddToCartButton id={id} quantity={quantity} type="icon" />
           </span>
         </div>
       </div>
-
-      <style jsx>
-        {`
-          .single-product {
-            width: 100%;
-            margin-bottom: 1rem;
-          }
-
-          .title-container {
-            margin-top: 0.5rem;
-            margin-bottom: 0.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-          }
-
-          .price,
-          .title {
-            margin: 0;
-            padding: 0;
-          }
-
-          .title {
-            text-align: right;
-            font-size: 1.5rem;
-          }
-
-          .add-to-cart {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            height: 50px;
-          }
-
-          .quantity-selector {
-            max-width: 35%;
-            height: 40px;
-          }
-
-          .add-to-cart-button {
-            height: 100%;
-            max-width: 45%;
-          }
-        `}
-      </style>
     </>
   );
 };

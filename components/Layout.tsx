@@ -4,6 +4,7 @@ import { useAtom } from "jotai";
 import { userAtom } from "../lib/atoms";
 import { useLazyQuery } from "@apollo/client";
 import { retrieveCartQuery } from "../lib/shopify";
+import "tailwindcss/tailwind.css";
 
 const Layout = ({ children }) => {
   const [user, setUser] = useAtom(userAtom);
@@ -23,29 +24,10 @@ const Layout = ({ children }) => {
 
   return (
     <>
-      <div className="global-container">
+      <div className="w-screen h-screen flex flex-col items-center p-4">
         <Nav />
-        <main className="content-container">{children}</main>
+        <main className="w-full max-w-5xl min-h-screen mt-4">{children}</main>
       </div>
-
-      <style jsx>
-        {`
-          .global-container {
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-          }
-
-          .content-container {
-            width: 100%;
-            min-height: 100vh;
-            padding: 1rem;
-            max-width: 1024px;
-          }
-        `}
-      </style>
     </>
   );
 };

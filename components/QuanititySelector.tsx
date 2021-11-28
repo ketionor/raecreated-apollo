@@ -20,8 +20,9 @@ const QuanititySelector = ({ quantity, setQuantity }: QuantitySelector) => {
 
   return (
     <>
-      <div className="incrementer-container">
+      <div className="flex justify-between items-center h-full w-full">
         <svg
+          className="flex-1 stroke-current h-full"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           fill="none"
@@ -29,7 +30,6 @@ const QuanititySelector = ({ quantity, setQuantity }: QuantitySelector) => {
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="plus-minus"
           role="button"
           onClick={() => {
             setDirection(false);
@@ -41,7 +41,7 @@ const QuanititySelector = ({ quantity, setQuantity }: QuantitySelector) => {
           <line x1="5" y1="12" x2="19" y2="12"></line>
         </svg>
 
-        <div className="number">
+        <div className="flex-1 flex justify-center items-center h-full bg-white rounded shadow-inner">
           <AnimatePresence exitBeforeEnter>
             <motion.p
               variants={variants}
@@ -58,6 +58,7 @@ const QuanititySelector = ({ quantity, setQuantity }: QuantitySelector) => {
         </div>
 
         <svg
+          className="flex-1 stroke-current h-full"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           fill="none"
@@ -65,7 +66,6 @@ const QuanititySelector = ({ quantity, setQuantity }: QuantitySelector) => {
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="plus-minus"
           role="button"
           onClick={() => {
             setDirection(true);
@@ -78,46 +78,6 @@ const QuanititySelector = ({ quantity, setQuantity }: QuantitySelector) => {
           <line x1="5" y1="12" x2="19" y2="12"></line>
         </svg>
       </div>
-
-      <style jsx>
-        {`
-          .incrementer-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 100%;
-            width: 100%;
-            border-radius: 5px;
-          }
-
-          .plus-minus {
-            flex: 1;
-            stroke: white;
-          }
-
-          .increment-button {
-            background-color: black;
-            border: none;
-            padding: 0;
-          }
-
-          .increment-button:hover {
-            cursor: pointer;
-          }
-
-          .number {
-            flex: 1;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 4px;
-            background-color: white;
-            box-shadow: inset 1px 1px 5px rgb(45, 45, 45),
-              inset -5px -5px 10px white;
-          }
-        `}
-      </style>
     </>
   );
 };

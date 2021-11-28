@@ -36,9 +36,9 @@ function Product({ title, images, id, html }) {
 
   return (
     <>
-      <div className="page-container">
-        <div className="image-container">
-          <div className="featured-image-container">
+      <div className="w-full">
+        <div className="md:max-w-lg">
+          <div className="w-full">
             <Image
               layout="responsive"
               height={1}
@@ -47,11 +47,11 @@ function Product({ title, images, id, html }) {
               alt="some alt"
             />
           </div>
-          <div className="sub-image-container">
+          <div className="flex flex-wrap mt-4 mb-4">
             {images.map((img, idx) => (
               <span
                 key={idx}
-                className="sub-image"
+                className="flex-1  ml-2 first:ml-0"
                 onClick={() => setFeaturedImg(idx)}
               >
                 <Image
@@ -59,14 +59,15 @@ function Product({ title, images, id, html }) {
                   width={1}
                   src={img.node.originalSrc}
                   layout="responsive"
+                  alt={title}
                 />
               </span>
             ))}
           </div>
         </div>
         <div className="right-container">
-          <h1 className="title">{title}</h1>
-          <div className={readMore ? "description" : "description fade-bottom"}>
+          <h1 className="text-2xl font-bold mb-2">{title}</h1>
+          <div className={readMore ? "" : "gradient-mask-b-0"}>
             <div
               dangerouslySetInnerHTML={{
                 __html: `${readMore ? html : html.slice(0, 150)}`,
@@ -74,7 +75,7 @@ function Product({ title, images, id, html }) {
             />
           </div>
           <p
-            className="read-more"
+            className="text-center italic underline mb-4 cursor-pointer"
             onClick={() => {
               setReadMore(!readMore);
             }}
@@ -82,112 +83,21 @@ function Product({ title, images, id, html }) {
             {`Show ${readMore ? "Less" : "More"}`}
           </p>
           <hr />
-          <div className="purchase-container">
+          <div className="flex flex-col items-center">
             {/* <h2>{price}</h2> */}
-            <span className="quantity-selector">
+            <div className="w-1/3 h-8 mt-4 ">
               <QuanititySelector
                 quantity={quantity}
                 setQuantity={setQuantity}
               />
-            </span>
+            </div>
             {/* <button onClick={handleBuyNow}>Buy Now</button> */}
-            <span onClick={() => {}} className="add-to-cart-button">
+            <div onClick={() => {}} className="w-full h-12">
               <AddToCartButton id={id} quantity={quantity} type="text" />
-            </span>
+            </div>
           </div>
         </div>
       </div>
-
-      <style jsx>
-        {`
-          .product-container {
-            width: 100%;
-          }
-
-          .featured-image-container {
-            width: 100%;
-          }
-
-          .sub-image-container {
-            display: flex;
-            flex-wrap: wrap;
-
-            margin-top: 1rem;
-            margin-bottom: 1rem;
-          }
-
-          .sub-image:not(:first-child) {
-            margin-left: 1rem;
-          }
-
-          .sub-image {
-            flex-grow: 1;
-          }
-
-          .purchase-container {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-          }
-
-          .description {
-          }
-
-          .fade-bottom {
-            -webkit-mask-image: linear-gradient(
-              to bottom,
-              black 50%,
-              transparent 100%
-            );
-            mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
-          }
-
-          .quantity-selector {
-            height: 30px;
-            width: 50%;
-            margin-top: 1rem;
-            margin-bottom: 1rem;
-          }
-
-          .add-to-cart-button {
-            width: 100%;
-            height: 50px;
-          }
-
-          .title {
-            font-size: 2em;
-          }
-
-          .read-more {
-            text-align: center;
-            font-size: small;
-            font-style: italic;
-            text-decoration: underline;
-          }
-
-          .read-more:hover {
-            cursor: pointer;
-          }
-
-          @media only screen and (min-width: 768px) {
-            .page-container {
-              display: flex;
-              justify-content: space-between;
-            }
-
-            .image-container {
-              max-width: 45%;
-              flex-grow: 1;
-            }
-
-            .right-container {
-              max-width: 45%;
-              flex-grow: 1;
-            }
-          }
-        `}
-      </style>
     </>
   );
 }

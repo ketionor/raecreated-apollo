@@ -3,6 +3,7 @@ import Link from "next/link";
 import FadeInFadeOut from "../Animations/FadeInFadeOut";
 import { useAtom } from "jotai";
 import { userAtom } from "../../lib/atoms";
+import X from "../UI/X";
 
 interface Link {
   name: string;
@@ -10,48 +11,34 @@ interface Link {
 }
 
 interface ModalTypes {
-  links: Link[];
+  links: { name: string; to: string }[];
   toggle: () => void;
 }
 
 const Modal = ({ links, toggle }: ModalTypes) => {
   const [user, setUser] = useAtom(userAtom);
 
-  const closeNav = () => {
-    toggle();
-  };
-
   return (
     <>
       <FadeInFadeOut>
-        <div className="container" id="nav-menu">
+        <div className="w-screen h-screen flex justify-center items-center">
           <ul className="overlayContent">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              onClick={closeNav}
-              className="xButton"
-            >
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
+            <span className="absolute top-6 right-6">
+              <X onClick={toggle} />
+            </span>
             {links.map(({ name, to }) => {
               //if the first character is a slash it is an internal link
               if (to[0] === "/") {
                 return (
                   <li onClick={toggle}>
                     <Link href={to} passHref>
-                      <a>{name}</a>
+                      <a className="text-2xl">{name}</a>
                     </Link>
                   </li>
                 );
               } else {
                 return (
-                  <li onClick={closeNav}>
+                  <li onClick={toggle}>
                     <a href={to}>{name}</a>
                   </li>
                 );
@@ -60,7 +47,9 @@ const Modal = ({ links, toggle }: ModalTypes) => {
             <li>
               {!user.accessToken && (
                 <>
-                  <button>Log In</button> <button>Register</button>
+                  <button className="bg-pink-500 hover:bg-pink-900 text-white font-bold py-2 px-4 rounded mt-4">
+                    Log In/Register
+                  </button>
                 </>
               )}
             </li>
