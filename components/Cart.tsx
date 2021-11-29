@@ -6,6 +6,7 @@ import { useAtom } from "jotai";
 import { userAtom } from "../lib/atoms";
 import CartItem from "./CartItem";
 import { motion } from "framer-motion";
+import FadeInFadeOut from "./Animations/FadeInFadeOut";
 
 const Cart = () => {
   const [cartElements, setCartElements] = useState([]);
@@ -93,12 +94,6 @@ const Cart = () => {
           Proceed to checkout
         </button>
       </a>
-
-      <style jsx>{`
-        .product-image {
-          width: 100%;
-        }
-      `}</style>
     </>
   );
 };

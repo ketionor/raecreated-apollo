@@ -5,6 +5,7 @@ import { userAtom } from "../lib/atoms";
 import { useLazyQuery } from "@apollo/client";
 import { retrieveCartQuery } from "../lib/shopify";
 import "tailwindcss/tailwind.css";
+import { AnimatePresence } from "framer-motion";
 
 const Layout = ({ children }) => {
   const [user, setUser] = useAtom(userAtom);
@@ -24,9 +25,11 @@ const Layout = ({ children }) => {
 
   return (
     <>
-      <div className="w-screen h-screen flex flex-col items-center p-4">
-        <Nav />
-        <main className="w-full max-w-5xl min-h-screen mt-4">{children}</main>
+      <div className="w-screen h-screen flex flex-col items-center overflow-x-hidden">
+        <AnimatePresence exitBeforeEnter>
+          <Nav />
+          <main className="w-full max-w-5xl min-h-screen">{children}</main>
+        </AnimatePresence>
       </div>
     </>
   );

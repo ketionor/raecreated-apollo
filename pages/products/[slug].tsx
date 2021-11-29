@@ -11,6 +11,7 @@ import { useLazyQuery } from "@apollo/client";
 import client from "../../lib/apollo";
 import AddToCartButton from "../../components/AddToCartButton";
 import QuanititySelector from "../../components/QuanititySelector";
+import FadeInFadeOut from "../../components/Animations/FadeInFadeOut";
 
 function Product({ title, images, id, html }) {
   console.log(images);
@@ -35,8 +36,8 @@ function Product({ title, images, id, html }) {
   };
 
   return (
-    <>
-      <div className="w-full">
+    <FadeInFadeOut>
+      <div className="w-full mt-24">
         <div className="md:max-w-lg">
           <div className="w-full">
             <Image
@@ -98,7 +99,7 @@ function Product({ title, images, id, html }) {
           </div>
         </div>
       </div>
-    </>
+    </FadeInFadeOut>
   );
 }
 

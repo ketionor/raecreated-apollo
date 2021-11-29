@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import PropTypes from "prop-types";
 import Link from "next/link";
@@ -18,6 +19,7 @@ const links = [
 ];
 
 const Nav = () => {
+  const router = useRouter();
   const [modalOpen, setModalOpen] = useState(false);
 
   const toggleNav = () => {
@@ -26,7 +28,11 @@ const Nav = () => {
 
   return (
     <>
-      <header className=" bg-black flex justify-between items-center w-full max-w-screen-lg h-16">
+      <header
+        className={`${
+          router.pathname === "/" ? "bg-transparent" : "bg-black"
+        } flex justify-between items-center w-full max-w-screen-lg h-24 fixed top-0 p-4 z-50`}
+      >
         <AnimatePresence>
           {modalOpen ? <Modal links={links} toggle={toggleNav} /> : null}
         </AnimatePresence>
@@ -35,9 +41,16 @@ const Nav = () => {
             <CartIcon to="/cart" />
           </Link>
         </span>
-        <div className="logoContainer">
+        <div className="h-full w-24">
           <Link href="/" passHref>
-            <h1 className="text-4xl">raecreatedit</h1>
+            {/* <h1 className="text-4xl">raecreatedit</h1> */}
+            <Image
+              alt=""
+              src="https://cdn.shopify.com/s/files/1/0499/7568/9378/files/Logo_45506a33-d1bb-48c7-aef9-5fdb159c2315.png?v=1614321139"
+              height={1}
+              width={1.5}
+              layout="responsive"
+            />
           </Link>
         </div>
         <ul className="list-none hidden md:flex md:justify-between md:items-center md:w-2/3">

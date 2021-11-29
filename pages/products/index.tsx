@@ -12,7 +12,7 @@ function Products({ products }) {
   //   console.log(JSON.stringify(products, null, 40));
   return (
     <>
-      <div className="page-container">
+      <div className="flex flex-wrap justify-center mt-24 p-4">
         {products.map((product) => {
           console.log(product);
           const featuredImage = product.node.images.edges[0].node.originalSrc;
@@ -34,35 +34,6 @@ function Products({ products }) {
           );
         })}
       </div>
-
-      <style jsx>
-        {`
-          .page-container {
-            width: 100%;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-          }
-
-          .single-product {
-            width: 75%;
-            display: flex;
-            flex-direction: column;
-          }
-
-          @media only screen and (min-width: 768px) {
-            .page-container {
-              display: flex;
-              flex-wrap: wrap;
-            }
-
-            .single-product {
-              width: 40%;
-              margin: 2rem;
-            }
-          }
-        `}
-      </style>
     </>
   );
 }
