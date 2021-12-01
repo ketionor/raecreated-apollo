@@ -27,7 +27,7 @@ const Cart = () => {
   );
 
   const log = () => {
-    console.log(data);
+    console.log(data.cart.checkoutUrl);
   };
 
   const containerVariants = {
@@ -57,11 +57,12 @@ const Cart = () => {
 
   return (
     <>
-      <h1 className="text-3xl">Cart</h1>
-      <motion.span
+      <h1 className="text-3xl mb-4">Cart</h1>
+      <motion.div
         variants={containerVariants}
         initial="hidden"
         animate={lineItems?.length > 0 && "show"}
+        className="flex flex-col"
       >
         {lineItems?.map((element, idx) => {
           const itemId = element.node.id;
@@ -70,27 +71,24 @@ const Cart = () => {
           const title = element.node.merchandise.product.title;
           const featuredImage =
             element.node.merchandise.product.images.edges[0].node.originalSrc;
+          const slug = element.node.merchandise.product.handle;
           return (
-            <motion.span key={itemId} variants={itemVariants}>
-              <>
-                <CartItem
-                  featuredImage={featuredImage}
-                  itemId={itemId}
-                  quantity={quantity}
-                  title={title}
-                  price={price}
-                  itemQuantityUpdate={itemQuanityUpdate}
-                />
-              </>
-            </motion.span>
+            <motion.div key={itemId} variants={itemVariants} className="">
+              <CartItem
+                featuredImage={featuredImage}
+                itemId={itemId}
+                quantity={quantity}
+                title={title}
+                price={price}
+                slug={slug}
+                itemQuantityUpdate={itemQuanityUpdate}
+              />
+            </motion.div>
           );
         })}
-      </motion.span>
-      <a href={user.checkoutUrl} rel="noopener noreferrer">
-        <button
-          onClick={log}
-          className="w-full bg-pink-500 hover:bg-pink-900 text-white font-bold py-2 px-4 rounded mt-4"
-        >
+      </motion.div>
+      <a href={data?.cart.checkoutUrl} rel="noopener noreferrer">
+        <button className="w-full bg-pink-500 hover:bg-pink-900 text-white font-bold py-2 px-4 rounded mt-4">
           Proceed to checkout
         </button>
       </a>

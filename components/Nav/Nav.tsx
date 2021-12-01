@@ -14,7 +14,7 @@ const links = [
   { name: "Home", to: "/" },
   // { name: "About", to: "/about" },
   { name: "In Stock", to: "/products" },
-  { name: "Cart", to: "/cart" },
+  // { name: "Cart", to: "/cart" },
   // { name: "Contact", to: "/contact" },
 ];
 

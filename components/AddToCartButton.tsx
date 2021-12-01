@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useAtom } from "jotai";
 import { userAtom } from "../lib/atoms";
 import client from "../lib/apollo";
-import { useMutation } from "@apollo/client";
+import { useMutation, useLazyQuery } from "@apollo/client";
 import {
   createCartMutation,
   getProductByHandle,
@@ -61,49 +61,59 @@ const AddToCartButton = ({ id, quantity, type }: AddToCartButton) => {
     cartLinesUpdateMutation
   );
 
+  const [loadCart, cartData] = useLazyQuery(retrieveCartQuery, {
+    variables: {
+      id: user.cartId,
+    },
+  });
+
   const handleAddToCart = async () => {
     if (user.cartId) {
       //...if the user already has a cart in local storage
 
-      //first, query the cache to get the latest version on the cart
-      const { cart } = await client.readQuery({
+      // first, query the cache to get the latest version on the cart
+      const data = await client.readQuery({
         query: retrieveCartQuery,
         variables: {
           id: user.cartId,
         },
       });
 
-      //next, check to see if that item is already in the cart or not
-      const THIS_ITEM_IN_CART = cart.lines.edges.find(
-        (element) => element.node.merchandise.id === id
-      );
+      console.log(data);
 
-      //...and the item already exists in the cart
-      if (THIS_ITEM_IN_CART) {
-        //update quantity
-        const THIS_LINE_id = THIS_ITEM_IN_CART.node.id;
-        let newQuantity: number =
-          Number(THIS_ITEM_IN_CART.node.quantity) + Number(quantity);
-        updateQuantity({
-          variables: {
-            cartId: user.cartId,
-            lines: {
-              id: THIS_LINE_id,
-              quantity: newQuantity,
-            },
-          },
-        });
+      // //next, check to see if that item is already in the cart or not
+      // const THIS_ITEM_IN_CART = data?.cart.lines.edges.find(
+      //   (element) => element.node.merchandise.id === id
+      // );
 
-        displaySuccessMessage();
-        return;
-      }
+      // //...and the item already exists in the cart
+      // if (THIS_ITEM_IN_CART) {
+      //   //update quantity
+      //   console.log("already in cart, updating");
+      //   const THIS_LINE_id = THIS_ITEM_IN_CART.node.id;
+      //   let newQuantity: number =
+      //     Number(THIS_ITEM_IN_CART.node.quantity) + Number(quantity);
+      //   updateQuantity({
+      //     variables: {
+      //       cartId: user.cartId,
+      //       lines: {
+      //         id: THIS_LINE_id,
+      //         quantity: newQuantity,
+      //       },
+      //     },
+      //   });
+
+      //   displaySuccessMessage();
+      //   return;
+      // }
 
       //...or if it isn't in the cart already
-      if (!THIS_ITEM_IN_CART) {
-        addToCart();
-        setSuccessMessage(true);
-        return;
-      }
+      // if (!THIS_ITEM_IN_CART) {
+
+      addToCart();
+      displaySuccessMessage();
+      return;
+      // }
     }
 
     if (!user.cartId) {
@@ -114,7 +124,7 @@ const AddToCartButton = ({ id, quantity, type }: AddToCartButton) => {
         cartId: response.data.cartCreate.cart.id,
         checkoutUrl: response.data.cartCreate.cart.checkoutUrl,
       });
-      setSuccessMessage(true);
+      displaySuccessMessage();
       return;
     }
   };

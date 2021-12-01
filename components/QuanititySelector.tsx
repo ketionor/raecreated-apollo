@@ -20,7 +20,7 @@ const QuanititySelector = ({ quantity, setQuantity }: QuantitySelector) => {
 
   return (
     <>
-      <div className="flex justify-between items-center h-full w-full">
+      <div className="grid gap-4 grid-cols-3 justify-items-center items-center h-full w-full">
         <svg
           className="flex-1 stroke-current h-full"
           xmlns="http://www.w3.org/2000/svg"
@@ -41,7 +41,7 @@ const QuanititySelector = ({ quantity, setQuantity }: QuantitySelector) => {
           <line x1="5" y1="12" x2="19" y2="12"></line>
         </svg>
 
-        <div className="flex-1 flex justify-center items-center h-full bg-white rounded shadow-inner">
+        <div className="grid grid-cols-1 justify-items-center items-center w-full h-full bg-white rounded shadow-inner">
           <AnimatePresence exitBeforeEnter>
             <motion.p
               variants={variants}

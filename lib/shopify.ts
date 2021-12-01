@@ -131,6 +131,7 @@ const cartQueryFragmentWithoutId = `
               ... on ProductVariant {
                 id
                 product {
+                  handle
                   images(first: 1) {
                     edges {
                       node {
