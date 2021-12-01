@@ -37,24 +37,20 @@ function Product({ title, images, id, html }) {
 
   return (
     <FadeInFadeOut>
-      <div className="w-full mt-24">
-        <div className="md:max-w-lg">
+      <div className="w-full mt-24 p-4 sm:grid sm:grid-cols-2">
+        <div className="sm:max-w-sm">
           <div className="w-full">
             <Image
               layout="responsive"
               height={1}
               width={1}
               src={images[featuredImg].node.originalSrc}
-              alt="some alt"
+              alt={title}
             />
           </div>
-          <div className="flex flex-wrap mt-4 mb-4">
+          <div className="grid grid-cols-3 gap-2 grid-flow-row mt-4 mb-4 ">
             {images.map((img, idx) => (
-              <span
-                key={idx}
-                className="flex-1  ml-2 first:ml-0"
-                onClick={() => setFeaturedImg(idx)}
-              >
+              <span key={idx} className="" onClick={() => setFeaturedImg(idx)}>
                 <Image
                   height={1}
                   width={1}
@@ -126,7 +122,10 @@ export async function getStaticProps({ params }) {
 }
 
 export async function getStaticPaths() {
-  const { data } = await client.query({ query: getCollectionByHandleQuery });
+  const { data } = await client.query({
+    query: getCollectionByHandleQuery,
+    variables: { handle: "always-in-stock", first: 100 },
+  });
 
   console.log(data);
   const slugs = data.shop.collectionByHandle.products.edges.map((product) => ({

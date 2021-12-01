@@ -23,7 +23,7 @@ const ProductPreview = ({
 
   return (
     <>
-      <div className="w-full mb-4">
+      <div className="w-full mb-4 md:mr-4 flex-4">
         <Link href={`/products/${slug}`} passHref>
           <div className="">
             <Image
@@ -33,9 +33,9 @@ const ProductPreview = ({
               src={featuredImage}
               alt={title}
             />
-            <div className="mt-2 mb-2 flex justify-between items-center">
+            <div className="mt-2 mb-2 flex justify-between items-start">
               <p className=" text-sm">{`$${Number(price).toFixed(2)}`}</p>
-              <p className="text-xl">{title}</p>
+              <p className="text-sm ml-2 truncate">{title}</p>
             </div>
           </div>
         </Link>

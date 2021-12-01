@@ -235,11 +235,16 @@ export const retrieveCartQuery = gql`
 `;
 
 export const getCollectionByHandleQuery = gql`
-  {
+  query getCollectionByHandle($handle: String!, $first: Int!) {
     shop {
-      collectionByHandle(handle: "always-in-stock") {
-        products(first: 10) {
+      collectionByHandle(handle: $handle) {
+        products(first: $first) {
+          pageInfo {
+            hasNextPage
+            hasPreviousPage
+          }
           edges {
+            cursor
             node {
               title
               id

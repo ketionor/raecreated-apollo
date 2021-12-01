@@ -12,10 +12,10 @@ import CartIcon from "../UI/CartIcon";
 //Define links to be used in the header, links to outside contents must use https format
 const links = [
   { name: "Home", to: "/" },
-  { name: "About", to: "/about" },
+  // { name: "About", to: "/about" },
   { name: "In Stock", to: "/products" },
   { name: "Cart", to: "/cart" },
-  { name: "Contact", to: "/contact" },
+  // { name: "Contact", to: "/contact" },
 ];
 
 const Nav = () => {
