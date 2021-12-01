@@ -26,10 +26,6 @@ const Cart = () => {
     cartLinesUpdateMutation
   );
 
-  const log = () => {
-    console.log(data.cart.checkoutUrl);
-  };
-
   const containerVariants = {
     hidden: { opacity: 1, x: 500 },
     show: {
@@ -87,6 +83,13 @@ const Cart = () => {
           );
         })}
       </motion.div>
+      <p className="text-right mt-4">
+        {loading
+          ? ""
+          : `Total: $${Number(
+              data?.cart.estimatedCost.subtotalAmount.amount
+            ).toFixed(2)}`}
+      </p>
       <a href={data?.cart.checkoutUrl} rel="noopener noreferrer">
         <button className="w-full bg-pink-500 hover:bg-pink-900 text-white font-bold py-2 px-4 rounded mt-4">
           Proceed to checkout

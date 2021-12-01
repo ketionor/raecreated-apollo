@@ -86,6 +86,11 @@ const cartQueryFragment = `
     cart(id: $id) {
       id
       checkoutUrl
+      estimatedCost {
+        subtotalAmount {
+          amount
+        }
+      }
       lines(first: 250) {
         edges {
           node {
