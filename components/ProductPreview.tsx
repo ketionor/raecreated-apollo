@@ -23,9 +23,9 @@ const ProductPreview = ({
 
   return (
     <>
-      <div className="w-full mb-4 md:mr-4 flex-4">
+      <div className="grid grid-cols-9 grid-flow-row gap-y-4">
         <Link href={`/products/${slug}`} passHref>
-          <div className="">
+          <div className="col-start-1 col-span-9">
             <Image
               height={1}
               width={1}
@@ -33,20 +33,20 @@ const ProductPreview = ({
               src={featuredImage}
               alt={title}
             />
-            <div className="mt-2 mb-2 flex justify-between items-start">
-              <p className=" text-sm">{`$${Number(price).toFixed(2)}`}</p>
-              <p className="text-sm ml-2 truncate">{title}</p>
-            </div>
           </div>
         </Link>
-        <div className="flex items-center justify-between h-14">
-          <span className="w-24 h-2/3">
-            <QuanititySelector quantity={quantity} setQuantity={setQuantity} />
-          </span>
-          <span className="w-auto h-2/3">
-            <AddToCartButton id={id} quantity={quantity} type="icon" />
-          </span>
-        </div>
+        <p className="text-sm col-start-1 col-span-1">{`$${Number(
+          price
+        ).toFixed(2)}`}</p>
+        <p className="text-sm text-right col-start-2 md:col-start-4 col-span-8 row-span-2">
+          {title}
+        </p>
+        <span className="col-start-1 col-span-3 row-start-4">
+          <QuanititySelector quantity={quantity} setQuantity={setQuantity} />
+        </span>
+        <span className="col-start-9 row-start-4">
+          <AddToCartButton id={id} quantity={quantity} type="icon" />
+        </span>
       </div>
     </>
   );
