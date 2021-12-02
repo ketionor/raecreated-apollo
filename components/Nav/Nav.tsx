@@ -30,7 +30,7 @@ const Nav = () => {
     <>
       <header
         className={`${
-          router.pathname === "/" ? "bg-transparent" : "bg-black"
+          router.pathname === "/" ? "bg-transparent" : "bg-gray-900"
         } flex justify-center items-center w-screen h-24 fixed top-0 z-50`}
       >
         <div className="ml-4 mr-4 w-full max-w-5xl flex justify-between">

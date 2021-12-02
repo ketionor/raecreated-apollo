@@ -25,7 +25,7 @@ const Layout = ({ children }) => {
 
   return (
     <>
-      <div className="w-screen h-screen flex flex-col items-center overflow-x-hidden">
+      <div className="bg-gray-900 text-gray-50 w-screen h-screen flex flex-col items-center overflow-x-hidden">
         <AnimatePresence exitBeforeEnter>
           <Nav />
           <main className="flex flex-col items-center w-full min-h-screen">
