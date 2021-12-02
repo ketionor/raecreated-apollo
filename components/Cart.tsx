@@ -27,20 +27,19 @@ const Cart = () => {
   );
 
   const containerVariants = {
-    hidden: { opacity: 1, x: 500 },
+    hidden: { opacity: 1 },
     show: {
       opacity: 1,
-      x: 0,
 
       transition: {
-        staggerChildren: 0.3,
+        staggerChildren: 0.1,
       },
     },
   };
 
   const itemVariants = {
-    hidden: { opacity: 0 },
-    show: { opacity: 1, transition: { duration: 0.6 } },
+    hidden: { opacity: 0, x: -25, y: -25 },
+    show: { opacity: 1, x: 0, y: 0, transition: { duration: 0.2 } },
   };
 
   useEffect(() => {
@@ -52,7 +51,7 @@ const Cart = () => {
   }, [data]);
 
   return (
-    <>
+    <div className="max-w-5xl">
       <h1 className="text-3xl mb-4">Cart</h1>
       <motion.div
         variants={containerVariants}
@@ -95,7 +94,7 @@ const Cart = () => {
           Proceed to checkout
         </button>
       </a>
-    </>
+    </div>
   );
 };
 

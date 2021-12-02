@@ -10,7 +10,7 @@ const FadeInFadeOut = ({ children }) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        transition={{ ease: "easeOut", duration: 0.5, when: "beforeChildren" }}
+        transition={{ ease: "easeOut", duration: 0.5 }}
       >
         {children}
       </motion.div>

@@ -2,10 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import client from "../../lib/apollo";
 import { getCollectionByHandleQuery } from "../../lib/shopify";
-
-import { gql, useQuery } from "@apollo/client";
-import AddToCartButton from "../../components/AddToCartButton";
 import ProductPreview from "../../components/ProductPreview";
+import FadeInFadeOut from "../../components/Animations/FadeInFadeOut";
 // import ProductsPage from "../../components/ProductsPage/ProductsPage";
 
 function Products({ products }) {
@@ -19,10 +17,9 @@ function Products({ products }) {
   // });
 
   return (
-    <>
-      {/* <h1 className="text-4xl">In Stock</h1> */}
+    <FadeInFadeOut>
       <div
-        className="flex flex-col items-center justify-center mt-24 p-4
+        className="flex flex-col items-center justify-center mt-24 ml-4 mr-4 max-w-5xl
         sm:grid sm:grid-flow-row sm:gap-4 sm:grid-cols-2  md:grid-cols-3 lg:grid-cols-4 "
       >
         {products.map((product) => {
@@ -45,7 +42,7 @@ function Products({ products }) {
           );
         })}
       </div>
-    </>
+    </FadeInFadeOut>
   );
 }
 

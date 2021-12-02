@@ -28,7 +28,9 @@ const Layout = ({ children }) => {
       <div className="w-screen h-screen flex flex-col items-center overflow-x-hidden">
         <AnimatePresence exitBeforeEnter>
           <Nav />
-          <main className="w-full max-w-5xl min-h-screen">{children}</main>
+          <main className="flex flex-col items-center w-full min-h-screen">
+            {children}
+          </main>
         </AnimatePresence>
       </div>
     </>
