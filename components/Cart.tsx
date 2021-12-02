@@ -89,7 +89,7 @@ const Cart = () => {
         {loading
           ? ""
           : `Total: $${Number(
-              data?.cart.estimatedCost.subtotalAmount.amount || "$0.00"
+              data?.cart.estimatedCost.subtotalAmount.amount
             ).toFixed(2)}`}
       </p>
       <a href={data?.cart.checkoutUrl} rel="noopener noreferrer">
