@@ -9,7 +9,6 @@ import { motion } from "framer-motion";
 import FadeInFadeOut from "./Animations/FadeInFadeOut";
 
 const Cart = () => {
-  const [cartElements, setCartElements] = useState([]);
   const [lineItems, setLineItems] = useState([]);
   const [user, setUser] = useAtom(userAtom);
 
@@ -51,7 +50,7 @@ const Cart = () => {
   }, [data]);
 
   return (
-    <div className="max-w-5xl">
+    <div className="max-w-5xl w-full">
       <h1 className="text-3xl mb-4">Cart</h1>
       <motion.div
         variants={containerVariants}
@@ -59,34 +58,38 @@ const Cart = () => {
         animate={lineItems?.length > 0 && "show"}
         className="flex flex-col"
       >
-        {lineItems?.map((element, idx) => {
-          const itemId = element.node.id;
-          const quantity = element.node.quantity;
-          const price = element.node.estimatedCost.subtotalAmount.amount;
-          const title = element.node.merchandise.product.title;
-          const featuredImage =
-            element.node.merchandise.product.images.edges[0].node.originalSrc;
-          const slug = element.node.merchandise.product.handle;
-          return (
-            <motion.div key={itemId} variants={itemVariants} className="">
-              <CartItem
-                featuredImage={featuredImage}
-                itemId={itemId}
-                quantity={quantity}
-                title={title}
-                price={price}
-                slug={slug}
-                itemQuantityUpdate={itemQuanityUpdate}
-              />
-            </motion.div>
-          );
-        })}
+        {lineItems?.length > 0 ? (
+          lineItems?.map((element, idx) => {
+            const itemId = element.node.id;
+            const quantity = element.node.quantity;
+            const price = element.node.estimatedCost.subtotalAmount.amount;
+            const title = element.node.merchandise.product.title;
+            const featuredImage =
+              element.node.merchandise.product.images.edges[0].node.originalSrc;
+            const slug = element.node.merchandise.product.handle;
+            return (
+              <motion.div key={itemId} variants={itemVariants} className="">
+                <CartItem
+                  featuredImage={featuredImage}
+                  itemId={itemId}
+                  quantity={quantity}
+                  title={title}
+                  price={price}
+                  slug={slug}
+                  itemQuantityUpdate={itemQuanityUpdate}
+                />
+              </motion.div>
+            );
+          })
+        ) : (
+          <p>Nothing here yet...</p>
+        )}
       </motion.div>
       <p className="text-right mt-4">
         {loading
           ? ""
           : `Total: $${Number(
-              data?.cart.estimatedCost.subtotalAmount.amount
+              data?.cart.estimatedCost.subtotalAmount.amount || "$0.00"
             ).toFixed(2)}`}
       </p>
       <a href={data?.cart.checkoutUrl} rel="noopener noreferrer">
