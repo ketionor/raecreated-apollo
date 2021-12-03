@@ -8,7 +8,7 @@ const X = ({ onClick }: X) => {
   return (
     <>
       <svg
-        className="fill-current stroke-current w-8"
+        className="fill-current stroke-current w-8 cursor-pointer"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
         strokeWidth="2"

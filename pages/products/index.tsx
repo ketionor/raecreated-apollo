@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import client from "../../lib/apollo";
 import { getCollectionByHandleQuery } from "../../lib/shopify";
 import ProductPreview from "../../components/ProductPreview";
@@ -15,6 +15,10 @@ function Products({ products, uniqueTags }) {
   const [currentProducts, setProducts] = useState([]);
   const [tags, setTags] = useState(["loading"]);
   const [filter, setFilter] = useState("always");
+
+  const toggleModal = () => {
+    setModalIsOpen(!modalIsOpen);
+  };
 
   const containerVariants = {
     hidden: { opacity: 1 },
@@ -46,7 +50,8 @@ function Products({ products, uniqueTags }) {
             setFilter(tag);
             setModalIsOpen(false);
           }}
-          className="border-2 rounded-3xl pt-2 pb-2 pr-4 pl-4 mr-2 mb-2 cursor-pointer hover:bg-pink-500 focus:bg-pink-900"
+          className="border-2 rounded-3xl pt-1 pb-1 pr-2 pl-2 mr-2 mb-2 text-xs
+            cursor-pointer hover:bg-pink-500 focus:bg-pink-900"
         >
           {tag}
         </button>
@@ -64,13 +69,15 @@ function Products({ products, uniqueTags }) {
           <h2 className="self-start text-4xl">In Stock</h2>
           <button
             className="lg:hidden flex justify-center items-center text-xl"
-            onClick={() => setModalIsOpen(true)}
+            onClick={toggleModal}
           >
             Filter
             <Unfold />
           </button>
         </div>
-        {modalIsOpen && <FilterModal tags={tags} />}
+        <AnimatePresence exitBeforeEnter>
+          {modalIsOpen && <FilterModal tags={tags} toggleModal={toggleModal} />}
+        </AnimatePresence>
         <div className="lg:grid lg:grid-cols-12">
           <div className="hidden lg:flex flex-col col-span-3 row-span-2">
             <p className="text-2xl mb-4">Tags</p>

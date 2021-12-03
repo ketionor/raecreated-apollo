@@ -35,11 +35,6 @@ const containerVariants = {
   },
 };
 
-const itemVariants = {
-  hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { duration: 0.6 } },
-};
-
 const Modal = ({ links, toggle }: ModalTypes) => {
   const [user, setUser] = useAtom(userAtom);
 
