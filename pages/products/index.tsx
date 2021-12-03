@@ -61,9 +61,9 @@ function Products({ products, uniqueTags }) {
     <FadeInFadeOut>
       <div className="flex flex-col items-center justify-center mt-24 ml-4 mr-4 max-w-5xl">
         <div className="flex justify-between w-full mb-2">
-          <h2 className="self-start text-2xl">In Stock</h2>
+          <h2 className="self-start text-4xl">In Stock</h2>
           <button
-            className="md:hidden flex justify-center items-center"
+            className="lg:hidden flex justify-center items-center text-xl"
             onClick={() => setModalIsOpen(true)}
           >
             Filter
@@ -71,39 +71,45 @@ function Products({ products, uniqueTags }) {
           </button>
         </div>
         {modalIsOpen && <FilterModal tags={tags} />}
-        <div className="hidden md:flex flex-wrap">{tags}</div>
-        <motion.div
-          className="mb-4 grid grid-cols-1 gap-4 sm:grid-flow-row sm:gap-4 sm:grid-cols-2  md:grid-cols-3 lg:grid-cols-4"
-          variants={currentProducts?.length > 0 && containerVariants}
-          initial="hidden"
-          animate="show"
-          key={filter}
-        >
-          {currentProducts?.length > 0 &&
-            currentProducts.map((product, idx) => {
-              const featuredImage =
-                product.node.images.edges[0].node.originalSrc;
-              const title = product.node.title;
-              const price = product.node.priceRange.minVariantPrice.amount;
-              const slug = product.node.handle;
-              const id = product.node.variants.edges[0].node.id;
-              return (
-                <motion.div
-                  key={idx}
-                  variants={itemVariants}
-                  className="shadow-lg bg-gray-800 rounded-lg"
-                >
-                  <ProductPreview
-                    featuredImage={featuredImage}
-                    title={title}
-                    price={price}
-                    slug={slug}
-                    id={id}
-                  />
-                </motion.div>
-              );
-            })}
-        </motion.div>
+        <div className="lg:grid lg:grid-cols-12">
+          <div className="hidden lg:flex flex-col col-span-3 row-span-2">
+            <p className="text-2xl mb-4">Tags</p>
+            <div className="">{tags}</div>
+          </div>
+          <motion.div
+            className="lg:col-span-9 mb-4 grid grid-cols-1 gap-4 
+              sm:grid-flow-row sm:gap-4 sm:grid-cols-2  md:grid-cols-3 lg:grid-cols-4"
+            variants={currentProducts?.length > 0 && containerVariants}
+            initial="hidden"
+            animate="show"
+            key={filter}
+          >
+            {currentProducts?.length > 0 &&
+              currentProducts.map((product, idx) => {
+                const featuredImage =
+                  product.node.images.edges[0].node.originalSrc;
+                const title = product.node.title;
+                const price = product.node.priceRange.minVariantPrice.amount;
+                const slug = product.node.handle;
+                const id = product.node.variants.edges[0].node.id;
+                return (
+                  <motion.div
+                    key={idx}
+                    variants={itemVariants}
+                    className="shadow-lg bg-gray-800 rounded-lg"
+                  >
+                    <ProductPreview
+                      featuredImage={featuredImage}
+                      title={title}
+                      price={price}
+                      slug={slug}
+                      id={id}
+                    />
+                  </motion.div>
+                );
+              })}
+          </motion.div>
+        </div>
       </div>
     </FadeInFadeOut>
   );
