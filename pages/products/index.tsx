@@ -128,10 +128,14 @@ export async function getStaticProps() {
     variables: { handle: "always-in-stock", first: 100 },
   });
 
-  let allTags = data?.shop.collectionByHandle.products.edges.reduce((a, b) => {
-    return [...a, ...b.node.tags];
-  }, []);
-  let uniqueTags = [...new Set<>(allTags)];
+  let allTags: string[] = data?.shop.collectionByHandle.products.edges.reduce(
+    (a, b) => {
+      return [...a, ...b.node.tags];
+    },
+    []
+  );
+
+  let uniqueTags: string[] = [...new Set(allTags)];
 
   return {
     props: {
